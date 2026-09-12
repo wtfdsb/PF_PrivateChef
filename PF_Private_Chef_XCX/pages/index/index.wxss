@@ -2,7 +2,10 @@
 .hero {
   background:
     radial-gradient(320rpx 260rpx at 85% 8%, rgba(201, 161, 94, .18), transparent 65%),
-    linear-gradient(165deg, #1c1712 0%, #0f0d0b 55%, #151109 100%);
+    radial-gradient(400rpx 300rpx at 8% 92%, rgba(201, 161, 94, .08), transparent 70%),
+    linear-gradient(165deg, #1c1712 0%, #0f0d0b 40%, #151109 65%, #1c1712 100%);
+  background-size: 160% 160%;
+  animation: heroGlow 9s ease-in-out infinite;
   padding: 48rpx 32rpx 56rpx;
   border-bottom: 1rpx solid var(--line-ink);
 }
@@ -23,6 +26,15 @@
   font-size: 24rpx;
   letter-spacing: 4rpx;
   margin-top: 6rpx;
+}
+/* 厨师头像图片位（images/chef.jpg），缺失时回退到"宴"印章 */
+.hero-avatar {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  border: 3rpx solid rgba(227, 198, 136, .6);
+  box-shadow: 0 8rpx 28rpx rgba(0, 0, 0, .35);
+  flex-shrink: 0;
 }
 .hero-mark {
   width: 92rpx;
@@ -201,7 +213,7 @@
   vertical-align: top;
 }
 .case-item:active { border-color: var(--gold); }
-.case-ph { height: 240rpx; }
+.case-ph { height: 240rpx; width: 100%; }
 .case-body { padding: 22rpx 24rpx 24rpx; }
 .case-title {
   font-size: 29rpx;
@@ -301,3 +313,30 @@
 .footer-2 { display: flex; gap: 20rpx; }
 .footer-call { width: 240rpx; flex-shrink: 0; }
 .footer-main { flex: 1; }
+
+/* ================= 在线客服悬浮按钮 ================= */
+.kf-fab {
+  position: fixed;
+  right: 32rpx;
+  bottom: 200rpx;
+  width: 96rpx;
+  height: 96rpx;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, .35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: floatY 3s ease-in-out infinite, popIn .5s .8s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+.kf-fab::after { border: none; }
+.kf-text {
+  color: #241d16;
+  font-size: 24rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  line-height: 1.1;
+}

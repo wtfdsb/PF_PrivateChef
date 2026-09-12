@@ -38,10 +38,13 @@ page {
   border-radius: 20rpx;
   border: 1rpx solid var(--line);
   overflow: hidden;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
 }
+.card:active { transform: scale(.985); }
 .card-ink {
   background: var(--ink-2);
   border: 1rpx solid var(--line-ink);
+  transition: transform .25s ease;
 }
 .gap {
   height: 24rpx;
@@ -103,6 +106,7 @@ page {
   font-size: 32rpx;
   font-weight: 600;
   letter-spacing: 3rpx;
+  transition: transform .12s ease, opacity .12s ease;
 }
 .btn-primary {
   background: linear-gradient(135deg, var(--gold-2), var(--gold));
@@ -113,7 +117,7 @@ page {
   color: var(--gold);
   background: transparent;
 }
-.btn:active { opacity: .85; }
+.btn:active { transform: scale(.97); opacity: .88; }
 
 /* 底部固定操作条 */
 .footer-bar {
@@ -174,3 +178,59 @@ page {
   color: var(--text-3);
   font-size: 26rpx;
 }
+
+/* ============ 动画 ============ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.88); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+@keyframes heroGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes ripple {
+  0% { box-shadow: 0 0 0 0 rgba(201, 161, 94, .45); }
+  100% { box-shadow: 0 0 0 24rpx rgba(201, 161, 94, 0); }
+}
+
+/* 入场动画（animation-fill-mode: both 防止闪烁） */
+.anim-up { animation: fadeUp .55s cubic-bezier(.22, .61, .36, 1) both; }
+.anim-in { animation: fadeIn .4s ease both; }
+.anim-pop { animation: popIn .5s cubic-bezier(.34, 1.56, .64, 1) both; }
+.d1 { animation-delay: .05s; }
+.d2 { animation-delay: .1s; }
+.d3 { animation-delay: .16s; }
+.d4 { animation-delay: .22s; }
+.d5 { animation-delay: .28s; }
+.d6 { animation-delay: .34s; }
+.d7 { animation-delay: .4s; }
+.d8 { animation-delay: .46s; }
+
+/* 悬浮客服按钮的呼吸效果 */
+.kf-pulse { animation: ripple 2.2s ease-out infinite; }
+
+/* 通用入场过渡 */
+.svc-item, .slot-chip, .case-item, .pkg-item {
+  transition: transform .25s ease, border-color .25s ease;
+}
+.svc-item:active, .slot-chip:active, .case-item:active {
+  transform: scale(.97);
+  border-color: var(--gold);
+}
+.need-tag { transition: transform .15s ease, background .2s ease; }
+.need-tag:active { transform: scale(.94); }
+.bk-btn { transition: transform .12s ease, opacity .12s ease; }
+.bk-btn:active { transform: scale(.97); opacity: .85; }

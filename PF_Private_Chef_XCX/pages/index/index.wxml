@@ -12,40 +12,48 @@
     <!-- ========== Hero：品牌 + 数据条 ========== -->
     <view class="hero">
       <view class="hero-top">
-        <view>
+        <view class="anim-up d1">
           <view class="hero-brand serif">{{chef.brand}}</view>
           <view class="hero-city">{{chef.city}}</view>
         </view>
-        <view class="hero-mark serif">宴</view>
+        <!-- 厨师头像图片位：images/chef.jpg 就位自动显示，缺失回退印章 -->
+        <image
+          wx:if="{{!avatarErr}}"
+          class="hero-avatar anim-pop d2"
+          src="/images/chef.jpg"
+          mode="aspectFill"
+          binderror="onAvatarError"
+        />
+        <view wx:else class="hero-mark serif anim-pop d2">宴</view>
       </view>
 
-      <view class="hero-slogan serif">把星级宴席搬进您家</view>
-      <view class="hero-sub">八大菜系、精品海鲜、海鲜姿造、高端火锅，名厨亲自掌勺</view>
+      <view class="hero-slogan serif anim-up d2">把星级宴席搬进您家</view>
+      <view class="hero-sub anim-up d3">八大菜系、精品海鲜、海鲜姿造、高端火锅，名厨亲自掌勺</view>
 
-      <view class="hero-badges">
+      <view class="hero-badges anim-up d3">
         <text wx:if="{{chef.awards}}" class="tag-dark">{{chef.awards}}</text>
         <text class="tag-dark">{{chef.title}}</text>
         <text wx:if="{{chef.healthCert}}" class="tag-dark">持健康证</text>
       </view>
 
-      <view class="hero-stats">
+      <view class="hero-stats anim-up d4">
         <view class="hero-stat">
-          <view class="hero-num serif">{{chef.stats.banquets}}<text class="hero-unit">+</text></view>
+          <view class="hero-num serif">{{heroNums.banquets}}<text class="hero-unit">+</text></view>
           <view class="hero-label">场上门家宴</view>
         </view>
         <view class="hero-div"></view>
         <view class="hero-stat">
-          <view class="hero-num serif">{{chef.stats.cuisines}}<text class="hero-unit">大</text></view>
+          <view class="hero-num serif">{{heroNums.cuisines}}<text class="hero-unit">大</text></view>
           <view class="hero-label">菜系精通</view>
         </view>
         <view class="hero-div"></view>
         <view class="hero-stat">
-          <view class="hero-num serif">{{chef.stats.rating}}<text class="hero-unit">分</text></view>
+          <view class="hero-num serif">{{heroNums.rating}}<text class="hero-unit">分</text></view>
           <view class="hero-label">客户评分</view>
         </view>
         <view class="hero-div"></view>
         <view class="hero-stat">
-          <view class="hero-num serif">{{chef.years}}<text class="hero-unit">年</text></view>
+          <view class="hero-num serif">{{heroNums.years}}<text class="hero-unit">年</text></view>
           <view class="hero-label">掌勺经验</view>
         </view>
       </view>
@@ -54,13 +62,19 @@
     <view class="wrap">
 
       <!-- ========== 服务项目 ========== -->
-      <view class="section">
+      <view class="section anim-up d3">
         <view class="section-head">
           <view class="section-title">服务项目</view>
           <view class="section-more">按需定制</view>
         </view>
         <view class="svc-grid">
-          <view wx:for="{{chef.services}}" wx:key="name" class="svc-item" bindtap="goBooking">
+          <view
+            wx:for="{{chef.services}}"
+            wx:key="name"
+            class="svc-item anim-pop"
+            style="animation-delay: {{0.18 + index * 0.06}}s"
+            bindtap="goBooking"
+          >
             <view class="svc-name">{{item.name}}</view>
             <view class="svc-desc">{{item.desc}}</view>
           </view>
@@ -68,7 +82,7 @@
       </view>
 
       <!-- ========== 近期可约档期 ========== -->
-      <view class="section">
+      <view class="section anim-up d4">
         <view class="section-head">
           <view class="section-title">近期档期</view>
           <view class="section-more" bindtap="goBooking">查看全部 ›</view>
@@ -78,6 +92,7 @@
             wx:for="{{nextSlots}}"
             wx:key="id"
             class="slot-chip"
+            style="animation: fadeIn .4s ease both; animation-delay: {{0.25 + index * 0.05}}s"
             data-date="{{item.date}}"
             data-meal="{{item.meal}}"
             bindtap="goBooking"
@@ -90,12 +105,19 @@
       </view>
 
       <!-- ========== 热销套餐 ========== -->
-      <view class="section">
+      <view class="section anim-up d5">
         <view class="section-head">
           <view class="section-title">热销套餐</view>
           <view class="section-more" bindtap="goMenu">查看全部套餐 ›</view>
         </view>
-        <view wx:for="{{packages}}" wx:key="id" class="card pkg-item" data-id="{{item.id}}" bindtap="goMenu">
+        <view
+          wx:for="{{packages}}"
+          wx:key="id"
+          class="card pkg-item anim-up"
+          style="animation-delay: {{0.3 + index * 0.08}}s"
+          data-id="{{item.id}}"
+          bindtap="goMenu"
+        >
           <view class="pkg-badge">{{item.tag}}</view>
           <view class="pkg-head">
             <view class="pkg-name serif">{{item.name}}</view>
@@ -116,8 +138,8 @@
         <view class="dim pkg-tip">※ 以上为起步参考价，最终以沟通确认的菜单和实际食材结算为准</view>
       </view>
 
-      <!-- ========== 菜品案例 ========== -->
-      <view class="section">
+      <!-- ========== 菜品案例（图片位：images/case-1.jpg ~ case-6.jpg） ========== -->
+      <view class="section anim-up d6">
         <view class="section-head">
           <view class="section-title">菜品案例</view>
           <view class="section-more">查看更多 ›</view>
@@ -127,10 +149,19 @@
             wx:for="{{cases}}"
             wx:key="id"
             class="case-item"
+            style="animation: fadeUp .5s cubic-bezier(.22,.61,.36,1) both; animation-delay: {{0.32 + index * 0.07}}s"
             data-id="{{item.id}}"
             bindtap="goCase"
           >
-            <view class="ph case-ph"><text>{{item.scene}}</text></view>
+            <image
+              wx:if="{{item.images.length && !caseImgErr[item.id]}}"
+              class="case-ph"
+              src="{{item.images[0]}}"
+              mode="aspectFill"
+              data-id="{{item.id}}"
+              binderror="onCaseImgError"
+            />
+            <view wx:else class="ph case-ph"><text>{{item.scene}}</text></view>
             <view class="case-body">
               <view class="case-title serif">{{item.title}}</view>
               <view class="case-menu">{{item.menu}}</view>
@@ -143,7 +174,7 @@
       </view>
 
       <!-- ========== 服务流程 ========== -->
-      <view class="section">
+      <view class="section anim-up d7">
         <view class="section-head">
           <view class="section-title">怎么合作</view>
         </view>
@@ -159,7 +190,7 @@
       </view>
 
       <!-- ========== 客户评价 ========== -->
-      <view class="section" wx:if="{{reviews.length}}">
+      <view class="section anim-up d8" wx:if="{{reviews.length}}">
         <view class="section-head">
           <view class="section-title">客户怎么说</view>
         </view>
@@ -177,7 +208,7 @@
       </view>
 
       <!-- ========== 服务承诺 ========== -->
-      <view class="section">
+      <view class="section anim-up d8">
         <view class="section-head">
           <view class="section-title">服务承诺</view>
         </view>
@@ -200,7 +231,7 @@
       </view>
 
       <!-- ========== 底部入口 ========== -->
-      <view class="section">
+      <view class="section anim-up d8">
         <view class="card link-card" bindtap="goAbout">
           <text>服务说明 · 收费与定金规则</text>
           <text class="dim">›</text>
@@ -220,6 +251,11 @@
       <view class="btn btn-ghost footer-call" bindtap="callChef">电话咨询</view>
       <view class="btn btn-primary footer-main" bindtap="goBooking">立即预约</view>
     </view>
+
+    <!-- ========== 在线客服悬浮按钮（官方客服会话） ========== -->
+    <button class="kf-fab kf-pulse" open-type="contact" hover-class="none" bindcontact="onContact">
+      <text class="kf-text">客服</text>
+    </button>
 
   </block>
 </view>

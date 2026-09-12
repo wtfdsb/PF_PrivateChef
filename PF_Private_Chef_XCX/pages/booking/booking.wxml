@@ -1,13 +1,13 @@
 <view class="page">
   <view class="wrap">
 
-    <view class="head">
+    <view class="head anim-up d1">
       <view class="h1 serif">预约上门</view>
       <view class="muted head-sub">仅限平顶山市区，偏远区域加收上门里程费。填完提交即可，我会尽快联系您确认菜单与报价。</view>
     </view>
 
     <!-- ========== 档期 ========== -->
-    <view class="card form-card">
+    <view class="card form-card anim-up d2">
       <view class="form-title">选择档期</view>
 
       <view class="row">
@@ -46,7 +46,7 @@
     </view>
 
     <!-- ========== 口味与需求 ========== -->
-    <view class="card form-card">
+    <view class="card form-card anim-up d3">
       <view class="form-title">口味与需求</view>
 
       <view class="field-block">
@@ -99,7 +99,7 @@
     </view>
 
     <!-- ========== 联系方式 ========== -->
-    <view class="card form-card">
+    <view class="card form-card anim-up d4">
       <view class="form-title">联系方式</view>
 
       <view class="row">
@@ -155,7 +155,7 @@
     </view>
 
     <!-- ========== 定金规则 ========== -->
-    <view class="notice">
+    <view class="notice anim-up d5">
       <view class="notice-title serif">提交前请知悉</view>
       <view>· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期；余款餐后结算</view>
       <view>· 定金线下收取（微信/支付宝/现金），我会电话与您确认菜单与报价</view>

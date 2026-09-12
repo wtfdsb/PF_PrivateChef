@@ -1,0 +1,6 @@
+# 图片素材不提交到仓库（本机生效即可），README 保留
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif

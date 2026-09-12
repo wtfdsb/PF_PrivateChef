@@ -11,6 +11,9 @@
 
 - 后端说明、接口清单见 [`PF_Private_Chef/README.md`](PF_Private_Chef/README.md)
 - 前端接口封装在 `PF_Private_Chef_XCX/utils/api.js`，与后端路径完全对齐
+- 前端图片素材放置说明见 [`PF_Private_Chef_XCX/images/README.md`](PF_Private_Chef_XCX/images/README.md)
+- 小程序在线客服开通步骤见 [`PF_Private_Chef_XCX/docs/客服开通.md`](PF_Private_Chef_XCX/docs/客服开通.md)
+- 上线部署（云托管）见 [`DEPLOY-部署上线.md`](DEPLOY-部署上线.md)
 
 ## 快速开始
 
@@ -33,5 +36,11 @@ mvn spring-boot:run
 
 ### 商家后台（厨师管理端）
 
-后端启动后，浏览器打开 `http://localhost:8080/admin/`，初始账号 `admin / admin888`。
-订单管理、档期、定金标记、评价授权都在里面；手机上用同一 WiFi 下电脑的局域网 IP 访问。
+- **开发期**：后端启动后，浏览器打开 `http://localhost:8080/admin/`，初始账号 `admin / admin888`。
+- **上线后**：部署到微信云托管，用 `https://域名/admin/` 在手机上随时访问，无需电脑常开 —— 见 [`DEPLOY-部署上线.md`](DEPLOY-部署上线.md)。
+
+订单管理、档期、定金标记、评价授权都在里面。
+
+### 上线部署
+
+见 [`DEPLOY-部署上线.md`](DEPLOY-部署上线.md)：推荐微信云托管（免备案、免服务器、按量付费），仓库已带 `Dockerfile` 可直接构建。

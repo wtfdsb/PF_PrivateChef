@@ -1,12 +1,12 @@
 <view class="page">
   <view class="wrap">
     <view class="done">
-      <view class="done-mark serif">✓</view>
-      <view class="h1 serif done-title">预约已提交</view>
-      <view class="muted done-sub">我会尽快联系您确认菜单与报价</view>
+      <view class="done-mark serif anim-pop">✓</view>
+      <view class="h1 serif done-title anim-up d1">预约已提交</view>
+      <view class="muted done-sub anim-up d2">我会尽快联系您确认菜单与报价</view>
     </view>
 
-    <view class="card info-card" wx:if="{{booking}}">
+    <view class="card info-card anim-up d3" wx:if="{{booking}}">
       <view class="row">
         <text class="label">档期</text>
         <text>{{booking.date}} · {{booking.meal}}</text>
@@ -37,14 +37,18 @@
       </view>
     </view>
 
-    <view class="tips">
+    <view class="tips anim-up d4">
       <view class="tips-title serif">接下来会发生什么</view>
       <view>1. 我会尽快联系您，确认菜单、口味和现场条件</view>
       <view>2. 菜单确认后给出报价，您支付 20% 定金即锁定档期</view>
       <view>3. 余款餐后结算；当天我提前到场，采买、烹饪、上菜、收尾</view>
     </view>
 
-    <view class="actions">
+    <button class="kf-hint anim-up d5" open-type="contact" hover-class="none">
+      <text>有急事？点这里在线客服沟通</text>
+    </button>
+
+    <view class="actions anim-up d6">
       <view class="btn btn-ghost" bindtap="goMy">查看我的预约</view>
       <view class="btn btn-primary" bindtap="goHome">返回首页</view>
     </view>

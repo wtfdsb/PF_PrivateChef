@@ -10,6 +10,11 @@ Page({
     reviews: [],
     /** 最近可约的几个档期，用于首页快捷展示 */
     nextSlots: [],
+    /** Hero 数据条滚动数字 */
+    heroNums: { banquets: 0, rating: '0.0', cuisines: 0, years: 0 },
+    /** 案例图加载失败记录（缺图自动回退到渐变占位） */
+    caseImgErr: {},
+    avatarErr: false,
   },
 
   onLoad() {
@@ -38,9 +43,46 @@ Page({
         nextSlots: slots.filter((s) => s.status === 'open').slice(0, 6),
         loading: false,
       })
+      this.countUp()
     } catch (e) {
       this.setData({ loading: false, error: e.message || '加载失败' })
     }
+  },
+
+  /** Hero 数字滚动（约 0.9s，easeOutCubic） */
+  countUp() {
+    const chef = this.data.chef
+    if (!chef) return
+    const targets = {
+      banquets: chef.stats.banquets || 0,
+      rating: chef.stats.rating || 0,
+      cuisines: chef.stats.cuisines || 0,
+      years: chef.years || 0,
+    }
+    const start = Date.now()
+    const dur = 900
+    const tick = () => {
+      const p = Math.min(1, (Date.now() - start) / dur)
+      const e = 1 - Math.pow(1 - p, 3) // easeOutCubic
+      const s = {
+        banquets: Math.round(targets.banquets * e),
+        rating: (targets.rating * e).toFixed(1),
+        cuisines: Math.round(targets.cuisines * e),
+        years: Math.round(targets.years * e),
+      }
+      this.setData({ heroNums: s })
+      if (p < 1) setTimeout(tick, 16)
+    }
+    tick()
+  },
+
+  /** 头像/案例图加载失败 → 回退渐变占位 */
+  onAvatarError() {
+    this.setData({ avatarErr: true })
+  },
+  onCaseImgError(e) {
+    const id = e.currentTarget.dataset.id
+    this.setData({ [`caseImgErr.${id}`]: true })
   },
 
   /** 去预约页，可带上预选档期 */
@@ -76,6 +118,11 @@ Page({
       return
     }
     wx.makePhoneCall({ phoneNumber: phone })
+  },
+
+  /** 在线客服（open-type="contact" 走官方客服会话） */
+  onContact() {
+    // open-type="contact" 由按钮本身触发，这里留空作埋点占位
   },
 
   onShareAppMessage() {

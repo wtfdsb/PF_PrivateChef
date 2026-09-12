@@ -60,7 +60,7 @@ const cases = [
     menu: '红烧黄河大鲤鱼、道口烧鸡、蒜香排骨、油焖大虾、清炒时蔬、手工馒头、小米粥',
     highlight: '一家人围坐的家常席，菜不花哨但道道是小时候的味道，老人孩子都吃得舒服',
     refPrice: 1280,
-    images: [],
+    images: ['/images/case-1.jpg'],
   },
   {
     id: 'case_002',
@@ -71,7 +71,7 @@ const cases = [
     menu: '整只烤鸭、清蒸石斑、葱烧海参、四喜丸子、海米扒白菜、长寿面、寿桃包',
     highlight: '寿宴讲究"整"字：鱼整条、鸡整只，上菜顺序按老规矩来，老人特别满意',
     refPrice: 2600,
-    images: [],
+    images: ['/images/case-2.jpg'],
   },
   {
     id: 'case_003',
@@ -82,7 +82,7 @@ const cases = [
     menu: '清蒸东星斑、海鲜姿造冰盘、佛跳墙（简版）、扒广肚、炸八块、位上汤品',
     highlight: '客户要求"有面子不铺张"，豫菜硬菜撑场，人均控制在 300 出头',
     refPrice: 3888,
-    images: [],
+    images: ['/images/case-3.jpg'],
   },
   {
     id: 'case_004',
@@ -93,7 +93,7 @@ const cases = [
     menu: '清蒸东星斑、蒜蓉粉丝蒸扇贝、白灼基围虾、葱姜炒花蟹、海鲜粥',
     highlight: '海鲜当日采买，清蒸最见火候，鱼肉嫩到筷子一碰就散',
     refPrice: 2680,
-    images: [],
+    images: ['/images/case-4.jpg'],
   },
   {
     id: 'case_005',
@@ -104,7 +104,7 @@ const cases = [
     menu: '海鲜姿造冰盘、刺身拼盘、象拔蚌、北极贝、精美雕花摆盘',
     highlight: '冰盘造型按主题定制，上桌先拍照再动筷，朋友圈先吃',
     refPrice: 3280,
-    images: [],
+    images: ['/images/case-5.jpg'],
   },
   {
     id: 'case_006',
@@ -115,7 +115,7 @@ const cases = [
     menu: '八凉八热、红烧狮子头、清炖甲鱼汤、白灼虾、蒜蓉蒸扇贝、糯米甜饭、月饼',
     highlight: '节日档期提前三周定档，一家十六口，菜量足、节奏慢、边吃边聊',
     refPrice: 2680,
-    images: [],
+    images: ['/images/case-6.jpg'],
   },
 ]
 

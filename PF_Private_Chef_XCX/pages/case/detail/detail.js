@@ -5,6 +5,12 @@ Page({
     loading: true,
     error: '',
     item: null,
+    /** 案例图全部加载失败时回退渐变占位 */
+    coverErr: false,
+  },
+
+  onCoverError() {
+    this.setData({ coverErr: true })
   },
 
   async onLoad(query) {

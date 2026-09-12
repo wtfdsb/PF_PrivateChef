@@ -29,5 +29,22 @@
 }
 .tips-title { color: #9a7a35; font-weight: 600; margin-bottom: 8rpx; }
 
-.actions { margin-top: 40rpx; display: flex; gap: 20rpx; }
+/* 在线客服提示 */
+.kf-hint {
+  width: 100%;
+  margin: 24rpx 0 0;
+  padding: 22rpx 28rpx;
+  border-radius: 16rpx;
+  background: rgba(201, 161, 94, .07);
+  border: 1rpx dashed rgba(201, 161, 94, .4);
+  color: #9a7a35;
+  font-size: 25rpx;
+  text-align: center;
+  letter-spacing: 1rpx;
+  transition: transform .15s ease;
+}
+.kf-hint::after { border: none; }
+.kf-hint:active { transform: scale(.98); }
+
+.actions { margin-top: 32rpx; display: flex; gap: 20rpx; }
 .actions .btn { flex: 1; }

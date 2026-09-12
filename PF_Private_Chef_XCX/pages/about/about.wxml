@@ -1,12 +1,18 @@
 <view class="page">
   <view class="wrap">
-    <view class="head">
+    <view class="head anim-up d1">
       <view class="h1 serif">服务说明</view>
       <view class="muted head-sub">把规则说在前面，合作起来省心</view>
     </view>
 
+    <!-- 在线客服 -->
+    <button class="kf-line anim-up d2" open-type="contact" hover-class="none">
+      <text class="kf-line-main">在线客服</text>
+      <text class="kf-line-sub">微信内直接沟通 · 一般 2 小时内回复</text>
+    </button>
+
     <!-- 服务承诺 -->
-    <view class="promises">
+    <view class="promises anim-up d3">
       <view class="promise-item">
         <view class="promise-name serif">正规食材</view>
         <view class="promise-desc">检疫合格 · 全程可溯</view>
@@ -21,7 +27,7 @@
       </view>
     </view>
 
-    <view class="card block">
+    <view class="card block anim-up d4">
       <view class="block-title">服务流程</view>
       <view wx:for="{{chef.flow}}" wx:key="step" class="flow">
         <text class="flow-step serif">{{item.step}}</text>
@@ -32,7 +38,7 @@
       </view>
     </view>
 
-    <view class="card block">
+    <view class="card block anim-up d5">
       <view class="block-title">定金与收费</view>
       <view class="line">· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
       <view class="line">· 余款<text class="em">餐后结算</text>，支持微信/支付宝/现金，线下收取</view>
@@ -41,14 +47,14 @@
       <view class="line">· 高档食材（参鲍翅肚、深海鱼等）单独报价；需外请帮厨、洗碗工时另计</view>
     </view>
 
-    <view class="card block">
+    <view class="card block anim-up d6">
       <view class="block-title">改期与取消</view>
       <view class="line">· 提前 <text class="em">2 天</text> 以上：免费改期，定金可退</view>
       <view class="line">· 2 天以内改期/取消：定金不退（食材多已采买）</view>
       <view class="line">· 因不可抗力（天气、突发疾病）双方协商处理</view>
     </view>
 
-    <view class="card block">
+    <view class="card block anim-up d7">
       <view class="block-title">卫生与安全</view>
       <view class="line">· 持有效<text class="em">健康证</text>上岗</view>
       <view class="line">· 生熟分开、食材当日采买、按需留样</view>
@@ -56,13 +62,13 @@
       <view class="line">· 不承接生食类、高风险食材（如需请另行协商）</view>
     </view>
 
-    <view class="card block">
+    <view class="card block anim-up d8">
       <view class="block-title">服务范围</view>
       <view class="line">{{chef.area}}</view>
       <view class="line">超出范围可协商出行费用</view>
     </view>
 
-    <view class="contact" bindtap="callChef">
+    <view class="contact anim-up d8" bindtap="callChef">
       <text>电话咨询</text>
       <text class="dim">›</text>
     </view>

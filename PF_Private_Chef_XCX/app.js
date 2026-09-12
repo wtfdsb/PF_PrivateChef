@@ -10,7 +10,8 @@ const config = {
   useMock: true,
   // 后端基地址（useMock = false 时生效）
   // 本地联调：http://localhost:8080  （开发者工具里记得勾「不校验合法域名」）
-  // 上线：必须换成 https + 已备案域名，并加入小程序 request 合法域名白名单
+  // 上线：部署到微信云托管后填默认域名，如 https://xxx.ap-shanghai.run.tcloudbase.com
+  //      并加入小程序 request 合法域名白名单（详见仓库根目录 DEPLOY-部署上线.md）
   apiBase: 'http://localhost:8080',
   // 厨师主体信息（会与远端数据合并，作为兜底）
   brand: {
