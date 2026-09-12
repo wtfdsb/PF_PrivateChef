@@ -5,14 +5,56 @@
   justify-content: space-between;
   margin-bottom: 14rpx;
 }
+.bk-title {
+  font-size: 31rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
 .status {
   font-size: 23rpx;
-  color: #9a7a35;
-  background: rgba(200, 164, 92, .14);
   padding: 4rpx 16rpx;
   border-radius: 999rpx;
+  border: 1rpx solid;
 }
+.st-pending { color: #b07c2e; border-color: rgba(176, 124, 46, .5); background: rgba(201, 161, 94, .08); }
+.st-confirmed { color: #9a7a35; border-color: rgba(154, 122, 53, .5); background: rgba(201, 161, 94, .12); }
+.st-making { color: #4a7f9e; border-color: rgba(74, 127, 158, .5); background: rgba(74, 127, 158, .08); }
+.st-done { color: var(--ok); border-color: rgba(47, 143, 91, .5); background: rgba(47, 143, 91, .08); }
+.st-canceled { color: var(--text-3); border-color: var(--line); background: rgba(0, 0, 0, .02); }
+
 .bk-line { font-size: 27rpx; line-height: 1.85; color: var(--text-2); }
 .bk-addr { word-break: break-all; }
+
+.bk-dep {
+  margin-top: 16rpx;
+  padding: 14rpx 20rpx;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  background: rgba(201, 161, 94, .07);
+  border: 1rpx dashed rgba(201, 161, 94, .35);
+  color: #9a7a35;
+}
+
+.bk-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+.bk-btn {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  border: 1rpx solid var(--line);
+  color: var(--text-2);
+}
+.bk-btn-call {
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  color: #241d16;
+  border: none;
+  font-weight: 600;
+}
+.bk-btn:active { opacity: .85; }
 
 .empty-wrap { padding-top: 40rpx; }

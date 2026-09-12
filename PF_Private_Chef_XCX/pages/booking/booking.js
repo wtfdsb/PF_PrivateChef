@@ -1,25 +1,30 @@
 const api = require('../../utils/api.js')
 
-const BUDGETS = ['500-1000', '1000-2000', '2000-3500', '3500-5000', '5000 以上', '还没定']
+const BUDGETS = ['1000-2000', '2000-3500', '3500-5000', '5000-8000', '8000 以上', '还没定']
+
+/** 特殊需求快捷标签（点击自动填入） */
+const NEED_TAGS = ['摆盘仪式', '酒水代办', '餐后收拾', '代采购食材']
 
 Page({
   data: {
     submitting: false,
     /** 可选档期（只展示可约的） */
     slots: [],
-    /** 日期选择器的候选项 */
     dateOptions: [],
     dateIndex: 0,
     mealOptions: ['午宴', '晚宴'],
     mealIndex: 0,
     budgetOptions: BUDGETS,
     budgetIndex: 1,
+    needTags: NEED_TAGS,
 
     form: {
       name: '',
       phone: '',
       people: '',
       address: '',
+      taste: '',
+      needs: '',
       remark: '',
       source: '',
     },
@@ -28,7 +33,6 @@ Page({
   async onLoad(query) {
     const slots = (await api.listSlots()).filter((s) => s.status === 'open')
 
-    // 日期去重，保留顺序
     const seen = new Set()
     const dateOptions = []
     slots.forEach((s) => {
@@ -69,13 +73,29 @@ Page({
     this.setData({ budgetIndex: Number(e.detail.value) })
   },
 
+  /** 点击特殊需求快捷标签：追加进 needs */
+  onNeedTag(e) {
+    const tag = e.currentTarget.dataset.tag
+    const cur = (this.data.form.needs || '').trim()
+    let next
+    if (cur.includes(tag)) {
+      // 已选过则移除
+      next = cur
+        .split(/[、,，\s]+/)
+        .filter((x) => x && x !== tag)
+        .join('、')
+    } else {
+      next = cur ? cur + '、' + tag : tag
+    }
+    this.setData({ 'form.needs': next })
+  },
+
   /** 提交预约 */
   async onSubmit() {
     if (this.data.submitting) return
 
     const { form, dateOptions, dateIndex, mealOptions, mealIndex, budgetOptions, budgetIndex } = this.data
 
-    // 档期冲突提醒：选中的日期+餐次若已满，直接拦下
     const date = dateOptions[dateIndex]
     const meal = mealOptions[mealIndex]
     const clash = this.data.slots.find((s) => s.date === date && s.meal === meal)

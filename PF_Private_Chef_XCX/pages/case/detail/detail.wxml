@@ -27,10 +27,10 @@
 
       <view class="card block price-block">
         <view>
-          <view class="dim">本场参考价</view>
-          <view class="gold price">¥{{item.refPrice}}</view>
+          <view class="dim">本场参考价（含服务费）</view>
+          <view class="gold price serif">¥{{item.refPrice}}</view>
         </view>
-        <view class="dim price-note">含服务费\n食材实报实销</view>
+        <view class="dim price-note">食材实报实销\n最终以确认菜单为准</view>
       </view>
 
       <!-- 占位说明：替换为真实照片后删除 -->

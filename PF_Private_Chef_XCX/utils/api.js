@@ -134,7 +134,9 @@ async function listReviews() {
  * @param {number} payload.people    人数
  * @param {string} payload.budget    预算区间
  * @param {string} payload.address   场地地址
- * @param {string} payload.remark    忌口 / 过敏 / 其他要求
+ * @param {string} payload.taste     口味与忌口（不吃辣/海鲜过敏等）
+ * @param {string} payload.needs     特殊需求（摆盘/酒水代办/餐后收拾/代采购）
+ * @param {string} payload.remark    其他备注
  * @param {string} payload.source    来源渠道（直接 / 转介绍-某某）
  */
 async function submitBooking(payload) {

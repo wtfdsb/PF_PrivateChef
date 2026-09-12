@@ -1,11 +1,34 @@
 .head { padding: 44rpx 0 32rpx; }
 .head-sub { margin-top: 12rpx; }
 
+/* 服务承诺 */
+.promises {
+  display: flex;
+  background: var(--ink-2);
+  border: 1rpx solid var(--line-ink);
+  border-radius: 20rpx;
+  padding: 28rpx 8rpx;
+  margin-bottom: 24rpx;
+}
+.promise-item { flex: 1; text-align: center; }
+.promise-name {
+  color: var(--gold-2);
+  font-size: 28rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+}
+.promise-desc {
+  color: rgba(240, 232, 216, .5);
+  font-size: 21rpx;
+  margin-top: 6rpx;
+}
+
 .block { padding: 28rpx; margin-bottom: 24rpx; }
 .block-title {
-  font-size: 26rpx;
+  font-family: "Songti SC", "Noto Serif SC", Georgia, serif;
+  font-size: 27rpx;
   color: #9a7a35;
-  letter-spacing: 2rpx;
+  letter-spacing: 3rpx;
   margin-bottom: 16rpx;
 }
 .line { font-size: 27rpx; line-height: 1.95; color: var(--text-2); }
@@ -22,7 +45,7 @@
   line-height: 60rpx;
   text-align: center;
   border-radius: 50%;
-  background: rgba(200, 164, 92, .14);
+  background: rgba(201, 161, 94, .14);
   color: #9a7a35;
   font-size: 24rpx;
   font-weight: 700;

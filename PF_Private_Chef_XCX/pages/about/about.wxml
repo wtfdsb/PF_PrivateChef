@@ -1,14 +1,30 @@
 <view class="page">
   <view class="wrap">
     <view class="head">
-      <view class="h1">服务说明</view>
+      <view class="h1 serif">服务说明</view>
       <view class="muted head-sub">把规则说在前面，合作起来省心</view>
+    </view>
+
+    <!-- 服务承诺 -->
+    <view class="promises">
+      <view class="promise-item">
+        <view class="promise-name serif">正规食材</view>
+        <view class="promise-desc">检疫合格 · 全程可溯</view>
+      </view>
+      <view class="promise-item">
+        <view class="promise-name serif">免费改期</view>
+        <view class="promise-desc">提前 2 天可调整</view>
+      </view>
+      <view class="promise-item">
+        <view class="promise-name serif">餐后清洁</view>
+        <view class="promise-desc">厨房简单收拾</view>
+      </view>
     </view>
 
     <view class="card block">
       <view class="block-title">服务流程</view>
       <view wx:for="{{chef.flow}}" wx:key="step" class="flow">
-        <text class="flow-step">{{item.step}}</text>
+        <text class="flow-step serif">{{item.step}}</text>
         <view>
           <view class="h3">{{item.title}}</view>
           <view class="muted">{{item.desc}}</view>
@@ -17,17 +33,18 @@
     </view>
 
     <view class="card block">
-      <view class="block-title">怎么收费</view>
+      <view class="block-title">定金与收费</view>
+      <view class="line">· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
+      <view class="line">· 余款<text class="em">餐后结算</text>，支持微信/支付宝/现金，线下收取</view>
       <view class="line">· <text class="em">服务费</text>：按桌或按人计价，菜单确认后报价</view>
       <view class="line">· <text class="em">食材费</text>：实报实销，采购小票一并提供；也可由您自行采购</view>
-      <view class="line">· 高档食材、外请帮厨、异地出行等情况单独协商</view>
-      <view class="line">· 定金支付后即算定档</view>
+      <view class="line">· 高档食材（参鲍翅肚、深海鱼等）单独报价；需外请帮厨、洗碗工时另计</view>
     </view>
 
     <view class="card block">
       <view class="block-title">改期与取消</view>
-      <view class="line">· 提前 <text class="em">48 小时</text> 以上取消：定金可退或改期</view>
-      <view class="line">· 48 小时以内取消：定金不退（食材多已采买）</view>
+      <view class="line">· 提前 <text class="em">2 天</text> 以上：免费改期，定金可退</view>
+      <view class="line">· 2 天以内改期/取消：定金不退（食材多已采买）</view>
       <view class="line">· 因不可抗力（天气、突发疾病）双方协商处理</view>
     </view>
 

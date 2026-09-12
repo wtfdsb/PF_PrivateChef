@@ -10,10 +10,10 @@
   ],
   "window": {
     "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#14100c",
-    "navigationBarTitleText": "私宴到家",
+    "navigationBarBackgroundColor": "#0f0d0b",
+    "navigationBarTitleText": "新谷私厨",
     "navigationBarTextStyle": "white",
-    "backgroundColor": "#f6f1e9"
+    "backgroundColor": "#f7f2e9"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",

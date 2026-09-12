@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>新谷私厨 · 商家后台</title>
+<style>
+  :root {
+    --bg: #0f0d0b; --card: #1a1713; --card2: #221e18;
+    --line: rgba(201, 161, 94, .22); --line2: rgba(201, 161, 94, .1);
+    --gold: #c9a15e; --gold2: #e3c688;
+    --text: #ede6d8; --muted: #a89d8a; --dim: #776d5c;
+    --ok: #4dab7d; --warn: #d99a4e; --danger: #d0665b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .hide { display: none !important; }
+
+  /* ===== 登录 ===== */
+  .login { max-width: 420px; margin: 0 auto; padding: 96px 28px 40px; }
+  .login .brand { text-align: center; margin-bottom: 48px; }
+  .login .brand h1 { font-size: 30px; letter-spacing: 6px; font-weight: 600; }
+  .login .brand p { color: var(--gold); font-size: 13px; letter-spacing: 3px; margin-top: 8px; }
+  .login .field { margin-bottom: 20px; }
+  .login input {
+    width: 100%; height: 52px; padding: 0 16px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--line); color: var(--text); font-size: 15px;
+  }
+  .login input:focus { outline: none; border-color: var(--gold); }
+  .login button {
+    width: 100%; height: 52px; margin-top: 8px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold2), var(--gold)); color: #241d16;
+    font-size: 16px; font-weight: 700; letter-spacing: 4px;
+  }
+  .login button:active { opacity: .85; }
+  .login .err { color: var(--danger); font-size: 13px; margin-top: 14px; text-align: center; min-height: 20px; }
+
+  /* ===== 布局 ===== */
+  header {
+    position: sticky; top: 0; z-index: 10; padding: 14px 16px 12px;
+    background: rgba(15, 13, 11, .94); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line2);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  header .t { font-size: 16px; font-weight: 600; letter-spacing: 2px; }
+  header .t small { color: var(--gold); font-size: 11px; letter-spacing: 1px; margin-left: 6px; }
+  header .act { color: var(--muted); font-size: 13px; padding: 6px 10px; border: 1px solid var(--line2); border-radius: 8px; }
+
+  main { max-width: 720px; margin: 0 auto; padding: 14px 14px 8px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat { background: var(--card); border: 1px solid var(--line2); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .stat b { display: block; font-size: 22px; color: var(--gold2); }
+  .stat span { font-size: 11px; color: var(--muted); }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; }
+  .tab {
+    padding: 8px 18px; border-radius: 999px; font-size: 13px; white-space: nowrap;
+    background: var(--card); border: 1px solid var(--line2); color: var(--muted);
+  }
+  .tab.on { background: rgba(201, 161, 94, .16); border-color: var(--gold); color: var(--gold2); }
+
+  /* ===== 卡片 ===== */
+  .card { background: var(--card); border: 1px solid var(--line2); border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+  .card .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .card .head .main { font-size: 16px; font-weight: 600; }
+  .card .head .main small { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 8px; }
+  .chip { font-size: 11px; padding: 3px 10px; border-radius: 999px; border: 1px solid; }
+  .st-pending { color: var(--warn); border-color: rgba(217, 154, 78, .5); }
+  .st-confirmed { color: var(--gold2); border-color: var(--line); }
+  .st-making { color: #7fb3d5; border-color: rgba(127, 179, 213, .5); }
+  .st-done { color: var(--ok); border-color: rgba(77, 171, 125, .5); }
+  .st-canceled { color: var(--dim); border-color: var(--line2); }
+
+  .info { font-size: 14px; color: var(--text); }
+  .info .l { color: var(--muted); font-size: 12px; margin: 8px 0 2px; }
+  .info .l:first-child { margin-top: 0; }
+  .info .v { white-space: pre-wrap; word-break: break-all; }
+  .phone { color: var(--gold2); font-weight: 600; text-decoration: none; }
+
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .btn {
+    padding: 8px 16px; border-radius: 9px; font-size: 13px; border: 1px solid var(--line);
+    background: transparent; color: var(--text);
+  }
+  .btn:active { opacity: .8; }
+  .btn.gold { background: linear-gradient(135deg, var(--gold2), var(--gold)); color: #241d16; border: none; font-weight: 600; }
+  .btn.warn { color: var(--danger); border-color: rgba(208, 102, 91, .5); }
+  .btn.on { background: rgba(77, 171, 125, .16); border-color: rgba(77, 171, 125, .5); color: var(--ok); }
+
+  .dep { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line2); font-size: 13px; color: var(--muted); }
+  .dep b { color: var(--warn); font-weight: 600; }
+  .dep b.paid { color: var(--ok); }
+
+  /* 档期 */
+  .slot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .slot { background: var(--card2); border: 1px solid var(--line2); border-radius: 12px; padding: 12px; }
+  .slot .d { font-size: 13px; color: var(--muted); }
+  .slot .meals { display: flex; gap: 8px; margin-top: 10px; }
+  .slot .m {
+    flex: 1; text-align: center; padding: 7px 0; border-radius: 8px; font-size: 12px;
+    border: 1px solid var(--line2); color: var(--muted);
+  }
+  .slot .m.open { color: var(--ok); border-color: rgba(77, 171, 125, .45); }
+  .slot .m.full { color: var(--warn); border-color: rgba(217, 154, 78, .5); }
+  .slot .m.closed { color: var(--dim); text-decoration: line-through; }
+
+  /* 评价 */
+  .rv .c { font-size: 14px; color: var(--text); margin: 6px 0; }
+  .rv .m { font-size: 12px; color: var(--dim); }
+
+  .empty { text-align: center; color: var(--dim); padding: 60px 0; font-size: 13px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%);
+    background: rgba(26, 23, 19, .95); border: 1px solid var(--line); color: var(--text);
+    padding: 10px 22px; border-radius: 999px; font-size: 13px; z-index: 99;
+  }
+</style>
+</head>
+<body>
+
+<!-- 登录 -->
+<div id="loginView" class="login hide">
+  <div class="brand">
+    <h1>新谷私厨</h1>
+    <p>商家管理后台</p>
+  </div>
+  <div class="field"><input id="username" type="text" placeholder="账号" autocomplete="username"></div>
+  <div class="field"><input id="password" type="password" placeholder="密码" autocomplete="current-password"></div>
+  <button onclick="login()">登 录</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<!-- 主界面 -->
+<div id="mainView" class="hide">
+  <header>
+    <div class="t">新谷私厨<small>商家后台</small></div>
+    <div class="act" onclick="logout()">退出</div>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="stat"><b id="sPending">-</b><span>待确认</span></div>
+      <div class="stat"><b id="sConfirmed">-</b><span>已定档</span></div>
+      <div class="stat"><b id="sMaking">-</b><span>制作中</span></div>
+      <div class="stat"><b id="sToday">-</b><span>今日场次</span></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on" data-tab="bookings" onclick="switchTab('bookings')">预约单</div>
+      <div class="tab" data-tab="slots" onclick="switchTab('slots')">档期</div>
+      <div class="tab" data-tab="reviews" onclick="switchTab('reviews')">评价</div>
+    </div>
+
+    <!-- 预约单 -->
+    <div id="tabBookings">
+      <div class="tabs" id="statusFilter">
+        <div class="tab on" data-s="" onclick="setFilter(this,'')">全部</div>
+        <div class="tab" data-s="pending" onclick="setFilter(this,'pending')">待确认</div>
+        <div class="tab" data-s="confirmed" onclick="setFilter(this,'confirmed')">已定档</div>
+        <div class="tab" data-s="making" onclick="setFilter(this,'making')">制作中</div>
+        <div class="tab" data-s="done" onclick="setFilter(this,'done')">已完成</div>
+        <div class="tab" data-s="canceled" onclick="setFilter(this,'canceled')">已取消</div>
+      </div>
+      <div id="bookingList"></div>
+    </div>
+
+    <!-- 档期 -->
+    <div id="tabSlots" class="hide">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">点击午宴/晚宴切换状态：可约 → 已满 → 关闭。私厨一天通常只接一场，确认接单后请把同一天其他档位设为已满。</div>
+      <div class="slot-grid" id="slotGrid"></div>
+    </div>
+
+    <!-- 评价 -->
+    <div id="tabReviews" class="hide">
+      <div id="reviewList"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+var TOKEN = localStorage.getItem('pf_admin_token') || ''
+var STATUS_TEXT = { pending: '待确认', confirmed: '已定档', making: '制作中', done: '已完成', canceled: '已取消' }
+var STATUS_FLOW = {
+  pending: { label: '确认接单', next: 'confirmed' },
+  confirmed: { label: '开始制作', next: 'making' },
+  making: { label: '完成', next: 'done' },
+  done: null,
+  canceled: { label: '恢复待确认', next: 'pending' },
+}
+var currentFilter = ''
+var currentTab = 'bookings'
+
+function esc(s) {
+  if (s === null || s === undefined) return ''
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  })
+}
+
+function toast(msg) {
+  var t = document.createElement('div')
+  t.className = 'toast'
+  t.textContent = msg
+  document.body.appendChild(t)
+  setTimeout(function () { t.remove() }, 2200)
+}
+
+async function api(path, opts) {
+  opts = opts || {}
+  var headers = { 'Content-Type': 'application/json' }
+  if (TOKEN) headers.Authorization = 'Bearer ' + TOKEN
+  var res = await fetch(path, {
+    method: opts.method || 'GET',
+    headers: headers,
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  })
+  var data
+  try { data = await res.json() } catch (e) { data = {} }
+  if (res.status === 401) {
+    localStorage.removeItem('pf_admin_token')
+    TOKEN = ''
+    showLogin()
+    throw new Error('请先登录')
+  }
+  if (data.code !== 0) throw new Error(data.msg || '请求失败')
+  return data.data
+}
+
+/* ===== 登录 ===== */
+function showLogin() {
+  document.getElementById('loginView').classList.remove('hide')
+  document.getElementById('mainView').classList.add('hide')
+}
+function showMain() {
+  document.getElementById('loginView').classList.add('hide')
+  document.getElementById('mainView').classList.remove('hide')
+  loadAll()
+}
+async function login() {
+  var u = document.getElementById('username').value.trim()
+  var p = document.getElementById('password').value
+  var err = document.getElementById('loginErr')
+  err.textContent = ''
+  if (!u || !p) { err.textContent = '请输入账号和密码'; return }
+  try {
+    var data = await api('/api/admin/login', { method: 'POST', body: { username: u, password: p } })
+    TOKEN = data.token
+    localStorage.setItem('pf_admin_token', TOKEN)
+    showMain()
+  } catch (e) {
+    err.textContent = e.message
+  }
+}
+function logout() {
+  localStorage.removeItem('pf_admin_token')
+  TOKEN = ''
+  showLogin()
+}
+
+/* ===== 页面切换 ===== */
+function switchTab(name) {
+  currentTab = name
+  document.querySelectorAll('.tabs .tab[data-tab]').forEach(function (el) {
+    el.classList.toggle('on', el.dataset.tab === name)
+  })
+  document.getElementById('tabBookings').classList.toggle('hide', name !== 'bookings')
+  document.getElementById('tabSlots').classList.toggle('hide', name !== 'slots')
+  document.getElementById('tabReviews').classList.toggle('hide', name !== 'reviews')
+  loadAll()
+}
+function setFilter(el, status) {
+  currentFilter = status
+  document.querySelectorAll('#statusFilter .tab').forEach(function (x) { x.classList.remove('on') })
+  el.classList.add('on')
+  loadBookings()
+}
+
+/* ===== 数据加载 ===== */
+async function loadAll() {
+  loadStats()
+  if (currentTab === 'bookings') loadBookings()
+  if (currentTab === 'slots') loadSlots()
+  if (currentTab === 'reviews') loadReviews()
+}
+
+async function loadStats() {
+  try {
+    var s = await api('/api/admin/stats')
+    document.getElementById('sPending').textContent = s.pending
+    document.getElementById('sConfirmed').textContent = s.confirmed
+    document.getElementById('sMaking').textContent = s.making
+    document.getElementById('sToday').textContent = s.today
+  } catch (e) { /* 忽略 */ }
+}
+
+async function loadBookings() {
+  var box = document.getElementById('bookingList')
+  box.innerHTML = '<div class="empty">加载中…</div>'
+  try {
+    var list = await api('/api/admin/bookings' + (currentFilter ? '?status=' + currentFilter : ''))
+    if (!list.length) {
+      box.innerHTML = '<div class="empty">没有预约单<br><span style="font-size:12px;">有新预约时会出现在这里，记得常来看看</span></div>'
+      return
+    }
+    box.innerHTML = list.map(function (b) {
+      var flow = STATUS_FLOW[b.status]
+      var flowBtn = flow
+        ? '<button class="btn ' + (b.status === 'pending' ? 'gold' : '') + '" onclick="changeStatus(' + b.id + ',\'' + flow.next + '\')">' + flow.label + '</button>'
+        : ''
+      var cancelBtn = (b.status === 'pending' || b.status === 'confirmed')
+        ? '<button class="btn warn" onclick="changeStatus(' + b.id + ',\'canceled\')">取消</button>'
+        : ''
+      var depPaid = Number(b.depositStatus) === 1
+      return '<div class="card">' +
+        '<div class="head">' +
+          '<div class="main">' + esc(b.date) + ' · ' + esc(b.meal) + '<small>' + esc(b.bookingNo) + '</small></div>' +
+          '<span class="chip st-' + esc(b.status) + '">' + (STATUS_TEXT[b.status] || esc(b.status)) + '</span>' +
+        '</div>' +
+        '<div class="info">' +
+          '<div class="l">客户</div><div class="v">' + esc(b.name) + ' · <a class="phone" href="tel:' + esc(b.phone) + '">' + esc(b.phone) + '</a> · ' + Number(b.people) + '人' + (b.budget ? ' · 预算¥' + esc(b.budget) : '') + '</div>' +
+          (b.address ? '<div class="l">场地地址</div><div class="v">' + esc(b.address) + '</div>' : '') +
+          (b.taste ? '<div class="l">口味与忌口</div><div class="v">' + esc(b.taste) + '</div>' : '') +
+          (b.needs ? '<div class="l">特殊需求</div><div class="v">' + esc(b.needs) + '</div>' : '') +
+          (b.remark ? '<div class="l">其他备注</div><div class="v">' + esc(b.remark) + '</div>' : '') +
+          (b.adminRemark ? '<div class="l">商家备注</div><div class="v">' + esc(b.adminRemark) + '</div>' : '') +
+          (b.createdAt ? '<div class="l">提交时间</div><div class="v">' + esc(String(b.createdAt).replace('T', ' ').slice(0, 16)) + '</div>' : '') +
+        '</div>' +
+        '<div class="dep">定金：<b class="' + (depPaid ? 'paid' : '') + '">' + (depPaid ? '已收 ✓' : '未收（20%定金 · 联系客户后线下收取）') + '</b>　' +
+          '<button class="btn" onclick="toggleDeposit(' + b.id + ',' + !depPaid + ')">' + (depPaid ? '改回未收' : '标记已收') + '</button></div>' +
+        '<div class="acts">' +
+          '<a class="btn" href="tel:' + esc(b.phone) + '">📞 联系客户</a>' +
+          flowBtn + cancelBtn +
+        '</div>' +
+      '</div>'
+    }).join('')
+  } catch (e) {
+    box.innerHTML = '<div class="empty">' + esc(e.message) + '</div>'
+  }
+}
+
+async function changeStatus(id, status) {
+  try {
+    var remark = (status === 'confirmed' || status === 'done') ? '' : undefined
+    await api('/api/admin/bookings/' + id + '/status', { method: 'POST', body: { status: status, adminRemark: remark } })
+    toast('已更新为「' + STATUS_TEXT[status] + '」')
+    loadAll()
+  } catch (e) { toast(e.message) }
+}
+
+async function toggleDeposit(id, paid) {
+  try {
+    await api('/api/admin/bookings/' + id + '/deposit', { method: 'POST', body: { paid: paid } })
+    toast(paid ? '已标记定金已收' : '已改回未收')
+    loadAll()
+  } catch (e) { toast(e.message) }
+}
+
+var SLOT_NEXT = { open: 'full', full: 'closed', closed: 'open' }
+async function loadSlots() {
+  var box = document.getElementById('slotGrid')
+  box.innerHTML = '<div class="empty" style="grid-column:1/-1;">加载中…</div>'
+  try {
+    var list = await api('/api/admin/slots?from=' + todayStr() + '&to=' + daysFromNow(13))
+    if (!list.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1;">暂无档期</div>'; return }
+    // 按日期分组：一天一张卡，午/晚两个按钮
+    var byDate = {}
+    list.forEach(function (s) {
+      if (!byDate[s.date]) byDate[s.date] = {}
+      byDate[s.date][s.meal] = s
+    })
+    box.innerHTML = Object.keys(byDate).map(function (date) {
+      var day = byDate[date]
+      return '<div class="slot">' +
+        '<div class="d">' + esc(date) + ' ' + weekdayOf(date) + '</div>' +
+        '<div class="meals">' +
+          mealBtn(day['午宴'], '午宴') + mealBtn(day['晚宴'], '晚宴') +
+        '</div>' +
+      '</div>'
+    }).join('')
+  } catch (e) {
+    box.innerHTML = '<div class="empty" style="grid-column:1/-1;">' + esc(e.message) + '</div>'
+  }
+}
+function mealBtn(slot, meal) {
+  if (!slot) return '<div class="m" style="opacity:.35;">' + meal + '</div>'
+  var cls = slot.status
+  var label = { open: '可约', full: '已满', closed: '关闭' }[slot.status] || slot.status
+  return '<div class="m ' + cls + '" onclick="toggleSlot(' + slot.id + ',\'' + slot.status + '\')">' + meal + '<br>' + label + '</div>'
+}
+async function toggleSlot(id, status) {
+  try {
+    await api('/api/admin/slots/' + id + '/status', { method: 'POST', body: { status: SLOT_NEXT[status] } })
+    loadSlots()
+  } catch (e) { toast(e.message) }
+}
+
+async function loadReviews() {
+  var box = document.getElementById('reviewList')
+  box.innerHTML = '<div class="empty">加载中…</div>'
+  try {
+    var list = await api('/api/admin/reviews')
+    if (!list.length) { box.innerHTML = '<div class="empty">暂无评价</div>'; return }
+    box.innerHTML = list.map(function (r) {
+      var ok = r.authorized === true || r.authorized === 1
+      return '<div class="card rv">' +
+        '<div class="head"><div class="main">' + esc(r.name) + '<small>' + esc(r.scene || '') + ' · ' + Number(r.score) + ' 分</small></div>' +
+        '<span class="chip st-' + (ok ? 'done' : 'pending') + '">' + (ok ? '已授权展示' : '未授权') + '</span></div>' +
+        '<div class="c">' + esc(r.content) + '</div>' +
+        '<div class="m">授权后才会显示在小程序首页；上线前请逐条取得客户同意</div>' +
+        '<div class="acts"><button class="btn ' + (ok ? '' : 'gold') + '" onclick="toggleAuth(' + r.id + ',' + !ok + ')">' + (ok ? '取消授权' : '授权展示') + '</button></div>' +
+      '</div>'
+    }).join('')
+  } catch (e) {
+    box.innerHTML = '<div class="empty">' + esc(e.message) + '</div>'
+  }
+}
+async function toggleAuth(id, authorized) {
+  try {
+    await api('/api/admin/reviews/' + id + '/authorize?authorized=' + authorized, { method: 'POST' })
+    loadReviews()
+  } catch (e) { toast(e.message) }
+}
+
+/* ===== 工具 ===== */
+function pad(n) { return String(n).padStart(2, '0') }
+function todayStr() {
+  var d = new Date()
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+}
+function daysFromNow(n) {
+  var d = new Date()
+  d.setDate(d.getDate() + n)
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+}
+function weekdayOf(dateStr) {
+  var w = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  return w[new Date(dateStr + 'T00:00:00').getDay()]
+}
+
+/* ===== 启动 ===== */
+if (TOKEN) showMain()
+else showLogin()
+</script>
+</body>
+</html>

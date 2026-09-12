@@ -22,8 +22,11 @@ public class MenuPackage {
 
     private String name;
 
-    /** 人均参考价；0 表示"按需定制" */
+    /** 人均参考价（旧字段，保留兼容） */
     private Integer perPerson;
+
+    /** 套餐起步价（总价，元）；0 表示面议定制 */
+    private Integer startPrice;
 
     private String tag;
 

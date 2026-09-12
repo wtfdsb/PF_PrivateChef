@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS chef_profile;
 CREATE TABLE chef_profile (
   id                BIGINT       NOT NULL AUTO_INCREMENT,
   name              VARCHAR(32)  NOT NULL COMMENT '姓名/称呼',
+  brand             VARCHAR(64)  DEFAULT NULL COMMENT '品牌名，如 新谷私厨',
   title             VARCHAR(64)  DEFAULT NULL COMMENT '头衔',
   years             INT          NOT NULL DEFAULT 0 COMMENT '从厨年限',
   city              VARCHAR(64)  DEFAULT NULL,
@@ -38,8 +39,8 @@ CREATE TABLE chef_profile (
   phone             VARCHAR(20)  DEFAULT NULL COMMENT '对外电话（首页"电话咨询"用）',
   health_cert       TINYINT(1)   NOT NULL DEFAULT 0 COMMENT '是否持健康证',
   stat_banquets     INT          NOT NULL DEFAULT 0 COMMENT '累计宴席场次',
-  stat_repeat_rate  INT          NOT NULL DEFAULT 0 COMMENT '老客户复购率（百分数，如 68）',
-  stat_max_people   INT          NOT NULL DEFAULT 0 COMMENT '单场最多接待人数',
+  stat_rating       DECIMAL(2,1) NOT NULL DEFAULT 5.0 COMMENT '客户评分（0-5）',
+  awards            VARCHAR(255) DEFAULT NULL COMMENT '获奖/头衔，如 河南烹饪大赛获奖',
   status            TINYINT      NOT NULL DEFAULT 1 COMMENT '1启用 0停用',
   deleted           TINYINT      NOT NULL DEFAULT 0,
   created_at        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,7 +78,8 @@ DROP TABLE IF EXISTS menu_package;
 CREATE TABLE menu_package (
   id          BIGINT       NOT NULL AUTO_INCREMENT,
   name        VARCHAR(64)  NOT NULL,
-  per_person  INT          NOT NULL DEFAULT 0 COMMENT '人均参考价；0 表示定制',
+  per_person  INT          NOT NULL DEFAULT 0 COMMENT '人均参考价（旧字段，保留兼容）',
+  start_price INT          NOT NULL DEFAULT 0 COMMENT '套餐起步价（总价，元）；0 表示面议定制',
   tag         VARCHAR(64)  DEFAULT NULL,
   dishes      TEXT         DEFAULT NULL COMMENT '菜品说明 JSON 数组',
   note        VARCHAR(255) DEFAULT NULL,
@@ -121,7 +123,10 @@ CREATE TABLE booking (
   people        INT          NOT NULL,
   budget        VARCHAR(32)  DEFAULT NULL COMMENT '预算区间',
   address       VARCHAR(255) NOT NULL COMMENT '场地地址',
-  remark        VARCHAR(500) DEFAULT NULL COMMENT '忌口/过敏/场地情况',
+  remark        VARCHAR(500) DEFAULT NULL COMMENT '其他备注',
+  taste         VARCHAR(500) DEFAULT NULL COMMENT '口味与忌口（不吃辣/海鲜过敏/老人孩子多等）',
+  needs         VARCHAR(500) DEFAULT NULL COMMENT '特殊需求（摆盘仪式/酒水代办/餐后收拾/代采购等）',
+  deposit_status TINYINT     NOT NULL DEFAULT 0 COMMENT '定金状态 0未收 1已收（线下收款后商家手动标记）',
   source        VARCHAR(64)  DEFAULT NULL COMMENT '介绍人',
   channel       VARCHAR(32)  DEFAULT NULL COMMENT '来源渠道 direct/share',
   status        VARCHAR(16)  NOT NULL DEFAULT 'pending'
@@ -135,6 +140,20 @@ CREATE TABLE booking (
   KEY idx_slot (slot_date, meal),
   KEY idx_status (status)
 ) ENGINE=InnoDB COMMENT='预约单';
+
+-- ------------------------------------------------------------
+-- 管理员（商家后台登录）
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS admin_user;
+CREATE TABLE admin_user (
+  id            BIGINT       NOT NULL AUTO_INCREMENT,
+  username      VARCHAR(32)  NOT NULL,
+  password_hash VARCHAR(64)  NOT NULL COMMENT 'SHA-256(salt:password) 十六进制',
+  salt          VARCHAR(32)  NOT NULL,
+  created_at    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_username (username)
+) ENGINE=InnoDB COMMENT='商家后台管理员';
 
 -- ------------------------------------------------------------
 -- 客户评价

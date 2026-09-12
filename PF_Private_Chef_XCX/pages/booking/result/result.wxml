@@ -1,8 +1,8 @@
 <view class="page">
   <view class="wrap">
     <view class="done">
-      <view class="done-mark">✓</view>
-      <view class="h1 done-title">预约已提交</view>
+      <view class="done-mark serif">✓</view>
+      <view class="h1 serif done-title">预约已提交</view>
       <view class="muted done-sub">我会尽快联系您确认菜单与报价</view>
     </view>
 
@@ -15,13 +15,21 @@
         <text class="label">人数</text>
         <text>{{booking.people}} 人</text>
       </view>
-      <view class="row">
+      <view class="row" wx:if="{{booking.budget}}">
         <text class="label">预算</text>
         <text>¥{{booking.budget}}</text>
       </view>
       <view class="row">
         <text class="label">场地</text>
         <text class="value-wrap">{{booking.address}}</text>
+      </view>
+      <view class="row" wx:if="{{booking.taste}}">
+        <text class="label">忌口</text>
+        <text class="value-wrap">{{booking.taste}}</text>
+      </view>
+      <view class="row" wx:if="{{booking.needs}}">
+        <text class="label">需求</text>
+        <text class="value-wrap">{{booking.needs}}</text>
       </view>
       <view class="row">
         <text class="label">联系人</text>
@@ -30,10 +38,10 @@
     </view>
 
     <view class="tips">
-      <view class="tips-title">接下来会发生什么</view>
-      <view>1. 我会在 2 小时内联系您，确认菜单、口味和现场条件</view>
-      <view>2. 菜单确认后给出报价，您支付定金即算定档</view>
-      <view>3. 当天我提前到场，采买、烹饪、上菜、收尾</view>
+      <view class="tips-title serif">接下来会发生什么</view>
+      <view>1. 我会尽快联系您，确认菜单、口味和现场条件</view>
+      <view>2. 菜单确认后给出报价，您支付 20% 定金即锁定档期</view>
+      <view>3. 余款餐后结算；当天我提前到场，采买、烹饪、上菜、收尾</view>
     </view>
 
     <view class="actions">

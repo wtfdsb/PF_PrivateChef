@@ -2,8 +2,8 @@
   <view class="wrap">
 
     <view class="head">
-      <view class="h1">预约上门做饭</view>
-      <view class="muted head-sub">填完提交即可，我会在 2 小时内联系您确认菜单与报价</view>
+      <view class="h1 serif">预约上门</view>
+      <view class="muted head-sub">仅限平顶山市区，偏远区域加收上门里程费。填完提交即可，我会尽快联系您确认菜单与报价。</view>
     </view>
 
     <!-- ========== 档期 ========== -->
@@ -25,11 +25,11 @@
       </view>
 
       <view class="row">
-        <text class="label">人数</text>
+        <text class="label">就餐人数</text>
         <input
           class="input"
           type="number"
-          placeholder="预计用餐人数"
+          placeholder="如:8人"
           placeholder-class="ph-text"
           value="{{form.people}}"
           data-key="people"
@@ -42,6 +42,59 @@
         <picker mode="selector" range="{{budgetOptions}}" value="{{budgetIndex}}" bindchange="onBudgetChange">
           <view class="picker-value">¥{{budgetOptions[budgetIndex]}} ›</view>
         </picker>
+      </view>
+    </view>
+
+    <!-- ========== 口味与需求 ========== -->
+    <view class="card form-card">
+      <view class="form-title">口味与需求</view>
+
+      <view class="field-block">
+        <view class="field-label">口味与忌口</view>
+        <textarea
+          class="textarea"
+          placeholder="如:一家不吃辣、孩子老人多、海鲜过敏..."
+          placeholder-class="ph-text"
+          value="{{form.taste}}"
+          data-key="taste"
+          maxlength="100"
+          bindinput="onInput"
+        />
+      </view>
+
+      <view class="field-block">
+        <view class="field-label">特殊需求</view>
+        <view class="need-tags">
+          <text
+            wx:for="{{needTags}}"
+            wx:key="*this"
+            class="need-tag"
+            data-tag="{{item}}"
+            bindtap="onNeedTag"
+          >{{item}}</text>
+        </view>
+        <textarea
+          class="textarea"
+          placeholder="如:需要摆盘仪式、酒水代办、餐后收拾、代采购食材..."
+          placeholder-class="ph-text"
+          value="{{form.needs}}"
+          data-key="needs"
+          maxlength="100"
+          bindinput="onInput"
+        />
+      </view>
+
+      <view class="field-block">
+        <view class="field-label">其他备注</view>
+        <textarea
+          class="textarea"
+          placeholder="场地情况（灶台、燃气、锅具）、想吃某道菜..."
+          placeholder-class="ph-text"
+          value="{{form.remark}}"
+          data-key="remark"
+          maxlength="150"
+          bindinput="onInput"
+        />
       </view>
     </view>
 
@@ -87,21 +140,8 @@
           bindinput="onInput"
         />
       </view>
-    </view>
 
-    <!-- ========== 其他要求 ========== -->
-    <view class="card form-card">
-      <view class="form-title">其他要求</view>
-      <textarea
-        class="textarea textarea-block"
-        placeholder="忌口 / 过敏 / 想吃某道菜 / 场地情况（灶台、燃气、锅具）…"
-        placeholder-class="ph-text"
-        value="{{form.remark}}"
-        data-key="remark"
-        maxlength="200"
-        bindinput="onInput"
-      />
-      <view class="row" style="margin-top:8rpx;">
+      <view class="row">
         <text class="label">介绍人</text>
         <input
           class="input"
@@ -114,11 +154,13 @@
       </view>
     </view>
 
+    <!-- ========== 定金规则 ========== -->
     <view class="notice">
-      <view class="notice-title">提交前请知悉</view>
-      <view>· 食材<text class="em">实报实销</text>（提供采购小票），服务费按确认的菜单单独报价</view>
-      <view>· 提交后我会电话/微信与您确认菜单与报价，<text class="em">确认后才算定档</text></view>
-      <view>· 定档需支付定金；如需取消请提前 48 小时，定金可退或改期</view>
+      <view class="notice-title serif">提交前请知悉</view>
+      <view>· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期；余款餐后结算</view>
+      <view>· 定金线下收取（微信/支付宝/现金），我会电话与您确认菜单与报价</view>
+      <view>· 食材<text class="em">实报实销</text>（提供采购小票），<text class="em">确认后才算定档</text></view>
+      <view>· 提交后请留意来电，预约信息会同步到「我的预约」</view>
     </view>
 
     <view class="gap"></view>

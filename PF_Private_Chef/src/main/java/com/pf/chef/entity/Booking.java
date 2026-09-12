@@ -49,8 +49,17 @@ public class Booking {
 
     private String address;
 
-    /** 忌口 / 过敏 / 场地情况 */
+    /** 其他备注 */
     private String remark;
+
+    /** 口味与忌口：不吃辣 / 海鲜过敏 / 老人孩子多等 */
+    private String taste;
+
+    /** 特殊需求：摆盘仪式 / 酒水代办 / 餐后收拾 / 代采购食材等 */
+    private String needs;
+
+    /** 定金状态：0 未收 1 已收（线下收款后商家手动标记） */
+    private Integer depositStatus;
 
     /** 介绍人（谁推荐来的） */
     private String source;

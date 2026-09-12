@@ -80,6 +80,9 @@ public class BookingService {
         booking.setBudget(req.getBudget());
         booking.setAddress(req.getAddress());
         booking.setRemark(req.getRemark());
+        booking.setTaste(req.getTaste());
+        booking.setNeeds(req.getNeeds());
+        booking.setDepositStatus(0);
         booking.setSource(req.getSource());
         booking.setChannel(req.getChannel() == null ? "direct" : req.getChannel());
         booking.setStatus(Booking.PENDING);
@@ -141,6 +144,17 @@ public class BookingService {
         if (adminRemark != null) {
             booking.setAdminRemark(adminRemark);
         }
+        bookingMapper.updateById(booking);
+        return booking;
+    }
+
+    /** 后台：标记定金已收/未收（线下收款，商家手动标记） */
+    public Booking updateDeposit(Long id, boolean paid) {
+        Booking booking = bookingMapper.selectById(id);
+        if (booking == null) {
+            throw new BizException(404, "预约不存在");
+        }
+        booking.setDepositStatus(paid ? 1 : 0);
         bookingMapper.updateById(booking);
         return booking;
     }

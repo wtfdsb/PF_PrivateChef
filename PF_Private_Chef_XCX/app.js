@@ -14,8 +14,9 @@ const config = {
   apiBase: 'http://localhost:8080',
   // 厨师主体信息（会与远端数据合并，作为兜底）
   brand: {
-    name: '私宴到家',
+    name: '新谷私厨',
     city: '河南 · 平顶山',
+    slogan: '把星级宴席搬进您家',
   },
 }
 

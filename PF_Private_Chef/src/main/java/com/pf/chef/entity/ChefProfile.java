@@ -24,11 +24,15 @@ public class ChefProfile {
     private Long id;
 
     private String name;
+
+    /** 品牌名，如「新谷私厨」 */
+    private String brand;
+
     private String title;
     private Integer years;
     private String city;
 
-    /** 服务范围，如「平顶山全市（新华、卫东...）」 */
+    /** 服务范围，如「平顶山市区（偏远区域加收上门里程费）」 */
     private String area;
 
     /** 擅长菜系，DB 里存 JSON 数组 */
@@ -43,12 +47,14 @@ public class ChefProfile {
     /** 是否持健康证 */
     private Boolean healthCert;
 
+    /** 累计宴席场次 */
     private Integer statBanquets;
 
-    /** 复购率，DB 存百分数（68 表示 68%） */
-    private Integer statRepeatRate;
+    /** 客户评分 0-5 */
+    private Double statRating;
 
-    private Integer statMaxPeople;
+    /** 获奖/头衔 */
+    private String awards;
 
     private Integer status;
     private Integer deleted;
@@ -56,16 +62,32 @@ public class ChefProfile {
     private LocalDateTime updatedAt;
 
     /**
-     * 前端约定的嵌套结构：chef.stats.{banquets, repeatRate, maxPeople}
-     * repeatRate 输出成小数（0.68），前端直接 *100 显示。
+     * 首页数据条：场次 / 菜系数 / 评分。
+     * 「从业年限」用 years 字段，前端直接取。
      */
     @JsonProperty("stats")
     public Map<String, Object> getStats() {
         Map<String, Object> m = new LinkedHashMap<>();
         m.put("banquets", statBanquets == null ? 0 : statBanquets);
-        m.put("repeatRate", statRepeatRate == null ? 0d : statRepeatRate / 100d);
-        m.put("maxPeople", statMaxPeople == null ? 0 : statMaxPeople);
+        m.put("rating", statRating == null ? 5.0 : statRating);
+        m.put("cuisines", cuisines == null ? 0 : cuisines.size());
         return m;
+    }
+
+    /**
+     * 服务项目 —— 固定展示项，属于展示性文案，不占数据库字段。
+     * 对齐豆包模板的服务分类。
+     */
+    @JsonProperty("services")
+    public List<Map<String, String>> getServices() {
+        return List.of(
+                service("家庭聚餐", "团圆饭 · 朋友小聚"),
+                service("生日寿宴", "寿面 · 寿桃 · 老规矩"),
+                service("商务接待", "有面子 · 有分寸"),
+                service("节日宴席", "中秋 · 春节 · 满月"),
+                service("精品海鲜", "当日采买 · 清蒸见火候"),
+                service("海鲜姿造", "冰盘摆盘 · 主题定制"),
+                service("高端火锅", "打边炉 · 海鲜火锅"));
     }
 
     /**
@@ -76,7 +98,7 @@ public class ChefProfile {
         return List.of(
                 step("01", "沟通需求", "人数、口味、预算、场地与时间"),
                 step("02", "确认菜单", "按预算出菜单，文字确认后定档"),
-                step("03", "采买备料", "食材实报实销，小票留存"),
+                step("03", "采买备料", "食材当日采买，实报实销，小票留存"),
                 step("04", "上门烹饪", "现场掌勺、上菜、收尾清理"));
     }
 
@@ -84,6 +106,13 @@ public class ChefProfile {
         Map<String, String> m = new LinkedHashMap<>();
         m.put("step", step);
         m.put("title", title);
+        m.put("desc", desc);
+        return m;
+    }
+
+    private static Map<String, String> service(String name, String desc) {
+        Map<String, String> m = new LinkedHashMap<>();
+        m.put("name", name);
         m.put("desc", desc);
         return m;
     }

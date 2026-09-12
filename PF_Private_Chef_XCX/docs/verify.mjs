@@ -1,9 +1,11 @@
 // 小程序工程自检：页面文件齐全性 + JS 语法
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import vm from 'node:vm'
 
-const root = process.argv[2] || '.'
+// 默认以脚本所在目录的上一级（小程序根目录）为检查对象
+const root = process.argv[2] || dirname(dirname(fileURLToPath(import.meta.url)))
 const appJson = JSON.parse(readFileSync(join(root, 'app.json'), 'utf8'))
 
 let problems = 0

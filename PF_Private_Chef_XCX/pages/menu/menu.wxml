@@ -1,45 +1,47 @@
 <view class="page">
   <view class="wrap">
     <view class="head">
-      <view class="h1">参考档位</view>
-      <view class="muted head-sub">{{chef.area}}\n按人均分档，可按需调整菜品</view>
+      <view class="h1 serif">参考套餐</view>
+      <view class="muted head-sub">{{chef.area}} · 按需定制，可按人数调整菜品</view>
     </view>
 
     <view wx:if="{{loading}}" class="empty">正在加载…</view>
 
     <view wx:for="{{packages}}" wx:key="id" class="card pkg">
+      <view class="pkg-badge">{{item.tag}}</view>
       <view class="pkg-head">
-        <view class="pkg-name">{{item.name}}</view>
+        <view class="pkg-name serif">{{item.name}}</view>
         <view class="pkg-price">
-          <block wx:if="{{item.perPerson > 0}}">
-            <text class="gold num">{{item.perPerson}}</text>
-            <text class="dim"> 元/人起</text>
+          <block wx:if="{{item.startPrice > 0}}">
+            <text class="pkg-rmb">¥</text><text class="num serif">{{item.startPrice}}</text><text class="pkg-from">起</text>
           </block>
           <block wx:else>
-            <text class="gold num-sm">按需定制</text>
+            <text class="num-sm serif">面议·定制</text>
           </block>
-        </view>
-      </view>
-
-      <view class="pkg-tag">{{item.tag}}</view>
-
-      <view class="pkg-dishes">
-        <view wx:for="{{item.dishes}}" wx:for-item="d" wx:key="*this" class="dish-line">
-          <text class="dot">·</text>
-          <text>{{d}}</text>
         </view>
       </view>
 
       <view class="pkg-note">{{item.note}}</view>
+
+      <view class="pkg-dishes">
+        <text wx:for="{{item.dishes}}" wx:for-item="d" wx:key="*this" class="dish">{{d}}</text>
+      </view>
+
+      <view class="pkg-cta" bindtap="goBooking">
+        <text wx:if="{{item.startPrice > 0}}">查看详情</text>
+        <text wx:else>立即预约</text>
+        <text class="pkg-arrow">→</text>
+      </view>
     </view>
 
     <view class="rule">
-      <view class="rule-title">报价与结算</view>
-      <view>· 上表为<text class="em">参考档位</text>，最终金额以您确认的菜单为准</view>
-      <view>· <text class="em">服务费</text>：按桌/按人计价</view>
-      <view>· <text class="em">食材费</text>：实报实销，提供采购小票；也可由您自行采购</view>
-      <view>· 高档食材（参鲍翅肚、深海鱼等）单独报价</view>
-      <view>· 需外请帮厨、洗碗工时，另计</view>
+      <view class="rule-title serif">定金与结算</view>
+      <view>· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
+      <view>· 余款<text class="em">餐后结算</text>；定金支持微信/支付宝/现金，线下收取</view>
+      <view>· 上表为<text class="em">起步参考价</text>，最终金额以您确认的菜单为准</view>
+      <view>· 食材<text class="em">实报实销</text>（提供采购小票），也可由您自行采购</view>
+      <view>· 高档食材（参鲍翅肚、深海鱼等）单独报价；需外请帮厨、洗碗工时另计</view>
+      <view>· 仅限平顶山市区；偏远区域加收上门里程费</view>
     </view>
 
     <view class="gap"></view>

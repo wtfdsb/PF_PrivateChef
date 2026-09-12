@@ -29,4 +29,9 @@ mvn spring-boot:run
 ### 前端
 
 用微信开发者工具打开 `PF_Private_Chef_XCX/` 目录，并在开发者工具中勾选「不校验合法域名」（本地联调 http 用）。
-切换 mock / 真实接口：改 `PF_Private_Chef_XCX/utils/api.js` 顶部的 `useMock`。
+切换 mock / 真实接口：改 `PF_Private_Chef_XCX/app.js` 顶部的 `useMock`。
+
+### 商家后台（厨师管理端）
+
+后端启动后，浏览器打开 `http://localhost:8080/admin/`，初始账号 `admin / admin888`。
+订单管理、档期、定金标记、评价授权都在里面；手机上用同一 WiFi 下电脑的局域网 IP 访问。
