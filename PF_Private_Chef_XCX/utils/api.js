@@ -10,6 +10,10 @@
 const app = getApp
 const mock = require('./mock.js')
 
+/** 登录态：静默 wx.login 换 token 后缓存在内存 */
+let _token = ''
+let _loginPromise = null
+
 /** 取全局配置（页面生命周期外调用要容错） */
 function cfg() {
   try {
@@ -19,17 +23,45 @@ function cfg() {
   }
 }
 
+/**
+ * 静默登录：wx.login() → /api/auth/login 换 token。
+ * 之后所有请求自动带 Authorization，后端据此把预约关联到 openid，
+ * 这样「我的预约」按登录态查、客服消息能推给客户。失败静默降级，不打断用户。
+ */
+async function ensureLogin() {
+  if (cfg().useMock) return ''
+  if (_token) return _token
+  if (_loginPromise) return _loginPromise
+  _loginPromise = new Promise((resolve) => {
+    wx.login({
+      success: async (res) => {
+        try {
+          const data = await request('/api/auth/login', { method: 'POST', data: { code: res.code } })
+          _token = (data && data.token) || ''
+          resolve(_token)
+        } catch (e) {
+          resolve('')
+        }
+      },
+      fail: () => resolve(''),
+    })
+  })
+  return _loginPromise
+}
+
 /* ============================================================
  * HTTP 通道（接 Java 后端时启用）
  * ========================================================== */
 function request(path, { method = 'GET', data = {}, header = {} } = {}) {
   const c = cfg()
   return new Promise((resolve, reject) => {
+    const h = { 'content-type': 'application/json', ...header }
+    if (_token) h.Authorization = `Bearer ${_token}`
     wx.request({
       url: `${c.apiBase}${path}`,
       method,
       data,
-      header: { 'content-type': 'application/json', ...header },
+      header: h,
       timeout: 15000,
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300 && res.data && res.data.code === 0) {
@@ -170,6 +202,8 @@ async function submitBooking(payload) {
     wx.setStorageSync('mock_bookings', list)
     return item
   }
+  // 先静默登录，让后端把预约关联到 openid（客服消息/我的预约都靠它）
+  await ensureLogin()
   // return cloudCall('submitBooking', body)
   return request('/api/bookings', { method: 'POST', data: body })
 }
@@ -178,7 +212,8 @@ async function submitBooking(payload) {
 async function listMyBookings() {
   if (cfg().useMock) return wx.getStorageSync('mock_bookings') || []
   // return cloudCall('listMyBookings')
-  // 未接登录前用本机记住的手机号兜底；接上 wx.login 后应改为只认 token
+  // 静默登录后优先按登录态查；未登录成功时用本机记住的手机号兜底
+  await ensureLogin()
   let phone = ''
   try {
     phone = wx.getStorageSync('my_phone') || ''

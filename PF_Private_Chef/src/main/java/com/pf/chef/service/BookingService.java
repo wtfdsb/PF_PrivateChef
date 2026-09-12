@@ -7,6 +7,7 @@ import com.pf.chef.entity.Booking;
 import com.pf.chef.entity.ScheduleSlot;
 import com.pf.chef.entity.WxUser;
 import com.pf.chef.mapper.BookingMapper;
+import com.pf.chef.mapper.WxUserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,8 @@ public class BookingService {
     private final BookingMapper bookingMapper;
     private final SlotService slotService;
     private final WxAuthService wxAuthService;
+    private final WxUserMapper wxUserMapper;
+    private final WxKfService wxKfService;
 
     /** 同一手机号每天最多提交几单（防刷） */
     @Value("${pf.booking.max-per-phone-per-day:3}")
@@ -95,6 +98,11 @@ public class BookingService {
         bookingMapper.insert(booking);
         log.info("新预约 {} {} {} {}人 电话{}", booking.getBookingNo(),
                 booking.getSlotDate(), booking.getMeal(), booking.getPeople(), booking.getPhone());
+
+        // 客服消息兜底：客户 48 小时内联系过在线客服时，会收到微信推送（异步，失败不影响主流程）
+        wxKfService.sendTextAsync(openid, "【新谷私厨】预约已收到：" + booking.getSlotDate() + " "
+                + booking.getMeal() + "，" + booking.getPeople() + "人。师傅会尽快电话联系您确认菜单与报价，请留意来电。"
+                + "（单号 " + booking.getBookingNo() + "）");
         return booking;
     }
 
@@ -145,6 +153,19 @@ public class BookingService {
             booking.setAdminRemark(adminRemark);
         }
         bookingMapper.updateById(booking);
+
+        // 状态变化通过客服消息告知客户（客户 48 小时内联系过客服才可达）
+        String text = switch (status) {
+            case Booking.CONFIRMED -> "【新谷私厨】您 " + booking.getSlotDate() + " " + booking.getMeal()
+                    + " 的预约已确认定档，届时准时上门为您掌勺。";
+            case Booking.CANCELED -> "【新谷私厨】您 " + booking.getSlotDate() + " " + booking.getMeal()
+                    + " 的预约已取消。如需改期，欢迎随时联系。";
+            case Booking.DONE -> "【新谷私厨】感谢您的信任！愿这桌菜让您和亲友尽兴，期待再次为您掌勺。";
+            default -> null;
+        };
+        if (text != null) {
+            wxKfService.sendTextAsync(getOpenid(booking), text);
+        }
         return booking;
     }
 
@@ -157,6 +178,15 @@ public class BookingService {
         booking.setDepositStatus(paid ? 1 : 0);
         bookingMapper.updateById(booking);
         return booking;
+    }
+
+    /** 预约单对应的客户 openid（未登录过的客户为 null） */
+    public String getOpenid(Booking booking) {
+        if (booking == null || booking.getUserId() == null) {
+            return null;
+        }
+        WxUser user = wxUserMapper.selectById(booking.getUserId());
+        return user == null ? null : user.getOpenid();
     }
 
     private String genBookingNo() {

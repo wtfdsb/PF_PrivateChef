@@ -45,11 +45,11 @@ public class BookingCreateReq {
     private String address;
 
     /** 口味与忌口：不吃辣 / 海鲜过敏 / 老人孩子多等 */
-    @Size(max = 200, message = "口味忌口描述太长了")
+    @Size(max = 500, message = "口味忌口描述太长了")
     private String taste;
 
     /** 特殊需求：摆盘仪式 / 酒水代办 / 餐后收拾 / 代采购食材等 */
-    @Size(max = 200, message = "特殊需求描述太长了")
+    @Size(max = 500, message = "特殊需求描述太长了")
     private String needs;
 
     /** 忌口 / 过敏 / 其他备注（兼容旧字段） */

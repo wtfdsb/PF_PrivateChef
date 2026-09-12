@@ -96,6 +96,19 @@
   .dep b { color: var(--warn); font-weight: 600; }
   .dep b.paid { color: var(--ok); }
 
+  /* 客服消息 */
+  .kf { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line2); }
+  .kf-h { font-size: 13px; color: var(--gold2); margin-bottom: 8px; }
+  .kf-h span { color: var(--dim); font-weight: 400; font-size: 11px; }
+  .kf-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .kf-row2 { display: flex; gap: 8px; }
+  .kf-row2 input {
+    flex: 1; height: 40px; padding: 0 12px; border-radius: 9px;
+    background: var(--card2); border: 1px solid var(--line2); color: var(--text); font-size: 13px;
+  }
+  .kf-row2 input:focus { outline: none; border-color: var(--gold); }
+  .kf-row2 .btn { flex-shrink: 0; padding: 8px 14px; }
+
   /* 档期 */
   .slot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .slot { background: var(--card2); border: 1px solid var(--line2); border-radius: 12px; padding: 12px; }
@@ -331,6 +344,17 @@ async function loadBookings() {
         '</div>' +
         '<div class="dep">定金：<b class="' + (depPaid ? 'paid' : '') + '">' + (depPaid ? '已收 ✓' : '未收（20%定金 · 联系客户后线下收取）') + '</b>　' +
           '<button class="btn" onclick="toggleDeposit(' + b.id + ',' + !depPaid + ')">' + (depPaid ? '改回未收' : '标记已收') + '</button></div>' +
+        (b.userId
+          ? '<div class="kf">' +
+            '<div class="kf-h">✉ 发客服消息给客户 <span>（客户 48h 内联系过在线客服才能送达）</span></div>' +
+            '<div class="kf-presets">' +
+              '<button class="btn" onclick="presetKf(' + b.id + ',\'您好，您预约的宴席已确认定档，师傅会按约定时间上门，届时见。\')">确认定档</button>' +
+              '<button class="btn" onclick="presetKf(' + b.id + ',\'您好，师傅想和您沟通一下菜单细节，方便时请回复。\')">沟通菜单</button>' +
+              '<button class="btn" onclick="presetKf(' + b.id + ',\'您好，师傅正在路上，请保持电话畅通。\')">师傅出发</button>' +
+            '</div>' +
+            '<div class="kf-row2"><input id="kfIn-' + b.id + '" placeholder="自定义消息内容…"><button class="btn gold" onclick="sendKf(' + b.id + ')">发送</button></div>' +
+          '</div>'
+          : '<div class="dep" style="opacity:.55;">该客户未在微信登录，无法发客服消息（电话联系即可）</div>') +
         '<div class="acts">' +
           '<a class="btn" href="tel:' + esc(b.phone) + '">📞 联系客户</a>' +
           flowBtn + cancelBtn +
@@ -356,6 +380,23 @@ async function toggleDeposit(id, paid) {
     await api('/api/admin/bookings/' + id + '/deposit', { method: 'POST', body: { paid: paid } })
     toast(paid ? '已标记定金已收' : '已改回未收')
     loadAll()
+  } catch (e) { toast(e.message) }
+}
+
+/* ===== 客服消息 ===== */
+function presetKf(id, text) {
+  var el = document.getElementById('kfIn-' + id)
+  if (el) el.value = text
+  el && el.focus()
+}
+async function sendKf(id) {
+  var el = document.getElementById('kfIn-' + id)
+  var content = ((el && el.value) || '').trim()
+  if (!content) { toast('请输入消息内容'); return }
+  try {
+    var r = await api('/api/admin/bookings/' + id + '/kf-message', { method: 'POST', body: { content: content } })
+    toast(r.msg || '已发送')
+    if (el) el.value = ''
   } catch (e) { toast(e.message) }
 }
 

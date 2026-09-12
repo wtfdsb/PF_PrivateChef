@@ -133,6 +133,7 @@ src/main/java/com/pf/chef/
 | GET | `/api/admin/bookings?status=&date=` | 后台：预约列表 | 🔒 管理员 |
 | POST | `/api/admin/bookings/{id}/status` | 后台：改状态 | 🔒 管理员 |
 | POST | `/api/admin/bookings/{id}/deposit` | 后台：标记定金已收/未收 | 🔒 管理员 |
+| POST | `/api/admin/bookings/{id}/kf-message` | 后台：给客户发微信客服消息 | 🔒 管理员 |
 | GET | `/api/admin/slots?from=&to=` | 后台：档期 | 🔒 管理员 |
 | POST | `/api/admin/slots/{id}/status` | 后台：改档期 | 🔒 管理员 |
 | GET | `/api/admin/reviews` | 后台：全部评价 | 🔒 管理员 |

@@ -11,6 +11,7 @@ import com.pf.chef.mapper.ReviewMapper;
 import com.pf.chef.service.AdminAuthService;
 import com.pf.chef.service.BookingService;
 import com.pf.chef.service.SlotService;
+import com.pf.chef.service.WxKfService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +36,7 @@ public class AdminController {
     private final AdminAuthService adminAuthService;
     private final BookingService bookingService;
     private final SlotService slotService;
+    private final WxKfService wxKfService;
     private final BookingMapper bookingMapper;
     private final ReviewMapper reviewMapper;
 
@@ -78,6 +80,39 @@ public class AdminController {
     @PostMapping("/bookings/{id}/deposit")
     public R<Booking> updateDeposit(@PathVariable Long id, @RequestBody DepositReq req) {
         return R.ok(bookingService.updateDeposit(id, Boolean.TRUE.equals(req.getPaid())));
+    }
+
+    /**
+     * 给客户发客服消息（微信官方客服消息通道）
+     * 前提：客户 48 小时内点过小程序「在线客服」并发过消息，且下单时已微信登录
+     */
+    @PostMapping("/bookings/{id}/kf-message")
+    public R<Map<String, Object>> sendKfMessage(@PathVariable Long id, @RequestBody KfMsgReq req) {
+        Booking booking = bookingMapper.selectById(id);
+        if (booking == null) {
+            return R.fail(404, "预约不存在");
+        }
+        if (req == null || req.getContent() == null || req.getContent().isBlank()) {
+            return R.fail(400, "消息内容不能为空");
+        }
+        String openid = bookingService.getOpenid(booking);
+        if (openid == null) {
+            return R.fail(400, "发送失败：该客户未在微信登录，无法发客服消息（可电话联系）");
+        }
+        int err = wxKfService.sendText(openid, req.getContent());
+        if (err == 0) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("errcode", 0);
+            m.put("msg", "已发送到客户微信");
+            return R.ok(m);
+        }
+        if (err == 45015 || err == 45047) {
+            return R.fail(400, "发送失败：客户超过 48 小时未联系过在线客服，需客户先在「在线客服」里发一条消息");
+        }
+        if (err == -1) {
+            return R.fail(400, "发送失败：微信未配置（WX_APPID/WX_SECRET）或客户无登录态");
+        }
+        return R.fail(500, "微信返回错误 errcode=" + err);
     }
 
     /** 改档期状态：open / full / closed */
@@ -138,5 +173,11 @@ public class AdminController {
     public static class DepositReq {
         /** true 已收 / false 未收 */
         private Boolean paid;
+    }
+
+    @Data
+    public static class KfMsgReq {
+        /** 发送给客户的文本内容 */
+        private String content;
     }
 }
