@@ -18,6 +18,13 @@
 }
 .kf-line::after { border: none; }
 .kf-line:active { transform: scale(.98); }
+.kf-line-head { display: flex; align-items: center; }
+.kf-ic-lg {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
 .kf-line-main {
   color: #9a7a35;
   font-size: 29rpx;

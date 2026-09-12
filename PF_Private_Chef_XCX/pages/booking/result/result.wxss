@@ -41,7 +41,16 @@
   font-size: 25rpx;
   text-align: center;
   letter-spacing: 1rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform .15s ease;
+}
+.kf-hint .kf-ic {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
 }
 .kf-hint::after { border: none; }
 .kf-hint:active { transform: scale(.98); }

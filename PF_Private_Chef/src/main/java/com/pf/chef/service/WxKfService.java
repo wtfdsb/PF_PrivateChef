@@ -1,5 +1,6 @@
 package com.pf.chef.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pf.chef.common.BizException;
 import com.pf.chef.config.WxProperties;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class WxKfService {
 
     private final WxProperties wx;
     private final RestClient restClient = RestClient.create();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /** access_token 缓存（7200s 有效，提前 5 分钟刷新） */
     private volatile String accessToken;
@@ -53,11 +55,14 @@ public class WxKfService {
             throw new BizException("未配置 WX_APPID / WX_SECRET，客服消息不可用");
         }
         try {
-            Map<String, Object> body = restClient.get()
+            // 微信接口有时返回 text/plain，取字符串后手动解析
+            String raw = restClient.get()
                     .uri(TOKEN_URL + "?grant_type=client_credential&appid={a}&secret={s}",
                             wx.getAppid(), wx.getSecret())
                     .retrieve()
-                    .body(Map.class);
+                    .body(String.class);
+            Map<String, Object> body = raw == null || raw.isBlank()
+                    ? null : objectMapper.readValue(raw, Map.class);
             if (body == null || body.get("access_token") == null) {
                 log.warn("获取 access_token 失败: {}", body);
                 throw new BizException("获取微信 access_token 失败：" + (body == null ? "无响应" : body.get("errmsg")));
@@ -98,11 +103,13 @@ public class WxKfService {
         payload.put("text", text);
 
         try {
-            Map<String, Object> resp = restClient.post()
+            String raw = restClient.post()
                     .uri(SEND_URL + "?access_token={t}", getAccessToken())
                     .body(payload)
                     .retrieve()
-                    .body(Map.class);
+                    .body(String.class);
+            Map<String, Object> resp = raw == null || raw.isBlank()
+                    ? null : objectMapper.readValue(raw, Map.class);
             Object code = resp == null ? null : resp.get("errcode");
             int errcode = code instanceof Number n ? n.intValue() : -1;
             if (errcode == 0) {

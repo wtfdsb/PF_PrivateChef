@@ -48,6 +48,7 @@
 
       <view class="anim-up d5">
         <button class="kf-row" open-type="contact" hover-class="none">
+          <view class="kf-ic kf-icon"></view>
           <text>这场席面想要同款？在线客服聊聊 ›</text>
         </button>
       </view>

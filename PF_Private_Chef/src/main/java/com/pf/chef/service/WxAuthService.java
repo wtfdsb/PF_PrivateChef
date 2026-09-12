@@ -1,6 +1,7 @@
 package com.pf.chef.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pf.chef.common.BizException;
 import com.pf.chef.common.TokenUtil;
 import com.pf.chef.config.WxProperties;
@@ -30,6 +31,7 @@ public class WxAuthService {
     private final WxProperties wx;
     private final WxUserMapper wxUserMapper;
     private final RestClient restClient = RestClient.create();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 用 code 换登录态
@@ -52,11 +54,14 @@ public class WxAuthService {
     private String resolveOpenid(String code) {
         if (wx.isConfigured()) {
             try {
-                Map<String, Object> body = restClient.get()
+                // 微信接口有时返回 text/plain，不能直接映射成 Map，取字符串后手动解析
+                String raw = restClient.get()
                         .uri(JSCODE2SESSION + "?appid={a}&secret={s}&js_code={c}&grant_type=authorization_code",
                                 wx.getAppid(), wx.getSecret(), code)
                         .retrieve()
-                        .body(Map.class);
+                        .body(String.class);
+                Map<String, Object> body = raw == null || raw.isBlank()
+                        ? null : objectMapper.readValue(raw, Map.class);
                 if (body == null || body.get("openid") == null) {
                     log.warn("code2session 失败: {}", body);
                     throw new BizException("微信登录失败：" + (body == null ? "无响应" : body.get("errmsg")));

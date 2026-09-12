@@ -7,7 +7,10 @@
 
     <!-- 在线客服 -->
     <button class="kf-line anim-up d2" open-type="contact" hover-class="none">
-      <text class="kf-line-main">在线客服</text>
+      <view class="kf-line-head">
+        <view class="kf-ic-lg kf-icon"></view>
+        <text class="kf-line-main">在线客服</text>
+      </view>
       <text class="kf-line-sub">微信内直接沟通 · 一般 2 小时内回复</text>
     </button>
 

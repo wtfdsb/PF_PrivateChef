@@ -252,9 +252,10 @@
       <view class="btn btn-primary footer-main" bindtap="goBooking">立即预约</view>
     </view>
 
-    <!-- ========== 在线客服悬浮按钮（官方客服会话） ========== -->
+    <!-- ========== 在线客服悬浮按钮（官方客服会话，玻璃拟态胶囊） ========== -->
     <button class="kf-fab kf-pulse" open-type="contact" hover-class="none" bindcontact="onContact">
-      <text class="kf-text">客服</text>
+      <view class="kf-ic kf-icon"></view>
+      <text class="kf-tx">客服</text>
     </button>
 
   </block>

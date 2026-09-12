@@ -202,8 +202,9 @@ page {
   100% { background-position: 0% 50%; }
 }
 @keyframes ripple {
-  0% { box-shadow: 0 0 0 0 rgba(201, 161, 94, .45); }
-  100% { box-shadow: 0 0 0 24rpx rgba(201, 161, 94, 0); }
+  0% { box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, .4), 0 0 0 0 rgba(201, 161, 94, .5); }
+  70% { box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, .4), 0 0 0 18rpx rgba(201, 161, 94, 0); }
+  100% { box-shadow: 0 12rpx 36rpx rgba(0, 0, 0, .4), 0 0 0 18rpx rgba(201, 161, 94, 0); }
 }
 
 /* 入场动画（animation-fill-mode: both 防止闪烁） */
@@ -220,7 +221,15 @@ page {
 .d8 { animation-delay: .46s; }
 
 /* 悬浮客服按钮的呼吸效果 */
-.kf-pulse { animation: ripple 2.2s ease-out infinite; }
+.kf-pulse { animation: ripple 2.4s ease-out infinite; }
+
+/* 客服耳机图标（SVG 内嵌，全站复用，金色描边） */
+.kf-icon {
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTNDNjg4IiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTEwIDI2YTE0IDE0IDAgMCAxIDI4IDAiLz48cmVjdCB4PSI2IiB5PSIyNiIgd2lkdGg9IjkiIGhlaWdodD0iMTMiIHJ4PSI0LjUiLz48cmVjdCB4PSIzMyIgeT0iMjYiIHdpZHRoPSI5IiBoZWlnaHQ9IjEzIiByeD0iNC41Ii8+PHBhdGggZD0iTTQyIDM5YTggOCAwIDAgMS04IDZoLTMiLz48L3N2Zz4=");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 /* 通用入场过渡 */
 .svc-item, .slot-chip, .case-item, .pkg-item {

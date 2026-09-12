@@ -45,6 +45,7 @@
     </view>
 
     <button class="kf-hint anim-up d5" open-type="contact" hover-class="none">
+      <view class="kf-ic kf-icon"></view>
       <text>有急事？点这里在线客服沟通</text>
     </button>
 

@@ -38,7 +38,15 @@
   text-align: left;
   letter-spacing: 1rpx;
   line-height: 1.6;
+  display: flex;
+  align-items: center;
   transition: transform .15s ease;
+}
+.kf-row .kf-ic {
+  width: 34rpx;
+  height: 34rpx;
+  margin-right: 14rpx;
+  flex-shrink: 0;
 }
 .kf-row::after { border: none; }
 .kf-row:active { transform: scale(.98); }
