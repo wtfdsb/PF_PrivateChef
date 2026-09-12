@@ -8,7 +8,7 @@ spring:
     name: pf-private-chef
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # 本机开发库。生产环境必须用环境变量注入，不要提交明文密码
+    # Local dev DB. In production inject via env vars, never commit plaintext passwords.
     url: jdbc:mysql://localhost:3306/pf_private_chef?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:123456}
@@ -19,7 +19,7 @@ spring:
 
 mybatis-plus:
   configuration:
-    # 下划线转驼峰：pickup_code -> pickupCode
+    # snake_case -> camelCase: pickup_code -> pickupCode
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
@@ -29,18 +29,18 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 
-# ===== 微信小程序 =====
-# 上线前必须填真实值；开发期可留空（登录接口会返回模拟 openid）
+# ===== WeChat Mini Program =====
+# Fill in real values before launch; leave empty in dev (login API returns mock openid).
 wx:
   appid: ${WX_APPID:}
   secret: ${WX_SECRET:}
-  # 是否允许开发期伪造登录（生产必须 false）
+  # Allow fake login in dev. MUST be false in production.
   mock-login: ${WX_MOCK_LOGIN:true}
 
 pf:
-  # 业务配置
+  # Business config
   booking:
-    # 同一手机号每天最多预约几单（防刷）
+    # Max bookings per phone per day (anti-spam)
     max-per-phone-per-day: 3
 
 logging:
