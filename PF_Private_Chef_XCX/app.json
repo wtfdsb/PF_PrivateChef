@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/case/detail/detail",
+    "pages/menu/menu",
+    "pages/booking/booking",
+    "pages/booking/result/result",
+    "pages/about/about",
+    "pages/my/my"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#14100c",
+    "navigationBarTitleText": "私宴到家",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f6f1e9"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

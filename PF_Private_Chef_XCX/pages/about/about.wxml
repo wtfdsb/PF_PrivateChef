@@ -1,0 +1,56 @@
+<view class="page">
+  <view class="wrap">
+    <view class="head">
+      <view class="h1">服务说明</view>
+      <view class="muted head-sub">把规则说在前面，合作起来省心</view>
+    </view>
+
+    <view class="card block">
+      <view class="block-title">服务流程</view>
+      <view wx:for="{{chef.flow}}" wx:key="step" class="flow">
+        <text class="flow-step">{{item.step}}</text>
+        <view>
+          <view class="h3">{{item.title}}</view>
+          <view class="muted">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="card block">
+      <view class="block-title">怎么收费</view>
+      <view class="line">· <text class="em">服务费</text>：按桌或按人计价，菜单确认后报价</view>
+      <view class="line">· <text class="em">食材费</text>：实报实销，采购小票一并提供；也可由您自行采购</view>
+      <view class="line">· 高档食材、外请帮厨、异地出行等情况单独协商</view>
+      <view class="line">· 定金支付后即算定档</view>
+    </view>
+
+    <view class="card block">
+      <view class="block-title">改期与取消</view>
+      <view class="line">· 提前 <text class="em">48 小时</text> 以上取消：定金可退或改期</view>
+      <view class="line">· 48 小时以内取消：定金不退（食材多已采买）</view>
+      <view class="line">· 因不可抗力（天气、突发疾病）双方协商处理</view>
+    </view>
+
+    <view class="card block">
+      <view class="block-title">卫生与安全</view>
+      <view class="line">· 持有效<text class="em">健康证</text>上岗</view>
+      <view class="line">· 生熟分开、食材当日采买、按需留样</view>
+      <view class="line">· 有过敏或忌口的客人请在预约时务必注明</view>
+      <view class="line">· 不承接生食类、高风险食材（如需请另行协商）</view>
+    </view>
+
+    <view class="card block">
+      <view class="block-title">服务范围</view>
+      <view class="line">{{chef.area}}</view>
+      <view class="line">超出范围可协商出行费用</view>
+    </view>
+
+    <view class="contact" bindtap="callChef">
+      <text>电话咨询</text>
+      <text class="dim">›</text>
+    </view>
+
+    <view class="gap"></view>
+    <view class="gap"></view>
+  </view>
+</view>

@@ -1,0 +1,32 @@
+.cover { height: 420rpx; }
+.head { padding: 36rpx 0 24rpx; }
+.tags { margin-bottom: 16rpx; }
+.title { letter-spacing: 2rpx; line-height: 1.35; }
+
+.block { padding: 28rpx; margin-bottom: 24rpx; }
+.block-title {
+  font-size: 26rpx;
+  color: #9a7a35;
+  letter-spacing: 2rpx;
+  margin-bottom: 14rpx;
+}
+.menu-text { font-size: 28rpx; line-height: 1.9; }
+.hl-text { font-size: 27rpx; line-height: 1.9; color: var(--text-2); }
+
+.price-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.price { font-size: 52rpx; font-weight: 700; line-height: 1.2; }
+.price-note { text-align: right; line-height: 1.7; }
+
+.tip {
+  padding: 24rpx 28rpx;
+  border: 1rpx dashed var(--line);
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  line-height: 1.8;
+  color: var(--text-3);
+}
+.em { color: #9a7a35; }

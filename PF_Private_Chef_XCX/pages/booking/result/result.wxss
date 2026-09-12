@@ -1,0 +1,33 @@
+.done { padding: 80rpx 0 48rpx; text-align: center; }
+.done-mark {
+  width: 120rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  margin: 0 auto 28rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  color: #241d16;
+  font-size: 64rpx;
+  font-weight: 700;
+}
+.done-title { letter-spacing: 4rpx; }
+.done-sub { margin-top: 14rpx; }
+
+.info-card { padding: 8rpx 28rpx; }
+.label { width: 160rpx; flex-shrink: 0; color: var(--text-2); font-size: 27rpx; }
+.value-wrap { flex: 1; text-align: right; }
+
+.tips {
+  margin-top: 28rpx;
+  padding: 26rpx 28rpx;
+  background: rgba(200, 164, 92, .08);
+  border: 1rpx solid rgba(200, 164, 92, .3);
+  border-radius: 16rpx;
+  font-size: 25rpx;
+  line-height: 1.95;
+  color: var(--text-2);
+}
+.tips-title { color: #9a7a35; font-weight: 600; margin-bottom: 8rpx; }
+
+.actions { margin-top: 40rpx; display: flex; gap: 20rpx; }
+.actions .btn { flex: 1; }

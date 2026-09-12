@@ -1,0 +1,50 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="empty">正在加载…</view>
+  <view wx:elif="{{error}}" class="empty">{{error}}</view>
+
+  <block wx:else>
+    <view class="ph cover"><text>{{item.scene}}</text></view>
+
+    <view class="wrap">
+      <view class="head">
+        <view class="tags">
+          <text class="tag">{{item.scene}}</text>
+          <text class="tag">{{item.people}} 人</text>
+          <text class="tag">{{item.date}}</text>
+        </view>
+        <view class="h1 title">{{item.title}}</view>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">菜单</view>
+        <view class="menu-text">{{item.menu}}</view>
+      </view>
+
+      <view class="card block">
+        <view class="block-title">这一场的关键点</view>
+        <view class="hl-text">{{item.highlight}}</view>
+      </view>
+
+      <view class="card block price-block">
+        <view>
+          <view class="dim">本场参考价</view>
+          <view class="gold price">¥{{item.refPrice}}</view>
+        </view>
+        <view class="dim price-note">含服务费\n食材实报实销</view>
+      </view>
+
+      <!-- 占位说明：替换为真实照片后删除 -->
+      <view class="tip">
+        这一页可以放 3-9 张现场照片（菜品特写、摆盘、合影），
+        把 <text class="em">images</text> 字段填上真实图片地址即可自动展示。
+      </view>
+
+      <view class="gap"></view>
+      <view class="gap"></view>
+    </view>
+
+    <view class="footer-bar">
+      <view class="btn btn-primary" bindtap="goBooking">预约一桌这样的席面</view>
+    </view>
+  </block>
+</view>

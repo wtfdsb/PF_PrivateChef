@@ -1,0 +1,192 @@
+<view class="page">
+
+  <!-- 加载 / 错误 -->
+  <view wx:if="{{loading}}" class="empty">正在加载…</view>
+  <view wx:elif="{{error}}" class="empty">
+    <view>{{error}}</view>
+    <view class="btn btn-ghost" style="margin:32rpx auto 0;width:300rpx;" bindtap="load">重试</view>
+  </view>
+
+  <block wx:else>
+
+    <!-- ========== 厨师名片 ========== -->
+    <view class="hero">
+      <view class="hero-inner">
+        <view class="hero-badge">
+          <text wx:if="{{chef.healthCert}}">持健康证</text>
+          <text class="hero-badge-dot">·</text>
+          <text>从厨 {{chef.years}} 年</text>
+        </view>
+        <view class="hero-name">{{chef.name}}</view>
+        <view class="hero-title">{{chef.title}}</view>
+        <view class="hero-area">服务范围：{{chef.area}}</view>
+        <view class="hero-tags">
+          <text wx:for="{{chef.cuisines}}" wx:key="*this" class="tag tag-dark">{{item}}</text>
+        </view>
+        <view class="hero-intro">{{chef.intro}}</view>
+
+        <view class="hero-stats">
+          <view class="hero-stat">
+            <view class="hero-stat-num">{{chef.stats.banquets}}<text class="hero-stat-unit">场</text></view>
+            <view class="hero-stat-label">累计上门宴席</view>
+          </view>
+          <view class="hero-stat-div"></view>
+          <view class="hero-stat">
+            <view class="hero-stat-num">{{chef.stats.repeatRate * 100}}<text class="hero-stat-unit">%</text></view>
+            <view class="hero-stat-label">老客户复购</view>
+          </view>
+          <view class="hero-stat-div"></view>
+          <view class="hero-stat">
+            <view class="hero-stat-num">{{chef.stats.maxPeople}}<text class="hero-stat-unit">人</text></view>
+            <view class="hero-stat-label">单场最多接待</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="wrap">
+
+      <!-- ========== 最近可约档期 ========== -->
+      <view class="section">
+        <view class="section-head">
+          <view class="section-title">近期可约档期</view>
+          <view class="dim" bindtap="goBooking">查看全部 ›</view>
+        </view>
+        <scroll-view class="slot-scroll" scroll-x enable-flex>
+          <view
+            wx:for="{{nextSlots}}"
+            wx:key="id"
+            class="slot-chip"
+            data-date="{{item.date}}"
+            data-meal="{{item.meal}}"
+            bindtap="goBooking"
+          >
+            <view class="slot-date">{{item.date}}</view>
+            <view class="slot-meal">{{item.meal}}</view>
+          </view>
+        </scroll-view>
+        <view class="dim" style="margin-top:12rpx;">档期有限，点选日期可直接预约</view>
+      </view>
+
+      <!-- ========== 服务流程 ========== -->
+      <view class="section">
+        <view class="section-head">
+          <view class="section-title">怎么合作</view>
+        </view>
+        <view class="card flow-card">
+          <view wx:for="{{chef.flow}}" wx:key="step" class="flow-item">
+            <view class="flow-step">{{item.step}}</view>
+            <view class="flow-body">
+              <view class="h3">{{item.title}}</view>
+              <view class="muted">{{item.desc}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- ========== 作品案例 ========== -->
+      <view class="section">
+        <view class="section-head">
+          <view class="section-title">做过的席面</view>
+          <view class="dim">{{cases.length}} 场示例</view>
+        </view>
+
+        <view class="empty" wx:if="{{!cases.length}}">还没有作品，去后台添加第一条吧</view>
+
+        <view
+          wx:for="{{cases}}"
+          wx:key="id"
+          class="card case-card"
+          data-id="{{item.id}}"
+          bindtap="goCase"
+        >
+          <view class="ph case-ph">
+            <text>{{item.scene}}</text>
+          </view>
+          <view class="case-body">
+            <view class="case-top">
+              <text class="tag">{{item.scene}}</text>
+              <text class="dim">{{item.people}} 人 · {{item.date}}</text>
+            </view>
+            <view class="h3 case-title">{{item.title}}</view>
+            <view class="case-menu">{{item.menu}}</view>
+            <view class="case-foot">
+              <text class="gold case-price">参考 ¥{{item.refPrice}}</text>
+              <text class="dim">查看详情 ›</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- ========== 参考套餐 ========== -->
+      <view class="section">
+        <view class="section-head">
+          <view class="section-title">参考档位</view>
+          <view class="dim" bindtap="goMenu">看菜单 ›</view>
+        </view>
+        <view class="pkg-list">
+          <view wx:for="{{packages}}" wx:key="id" class="card pkg-item">
+            <view class="pkg-head">
+              <view>
+                <view class="h3">{{item.name}}</view>
+                <view class="dim">{{item.tag}}</view>
+              </view>
+              <view class="pkg-price">
+                <block wx:if="{{item.perPerson > 0}}">
+                  <text class="gold pkg-num">{{item.perPerson}}</text>
+                  <text class="dim"> 元/人起</text>
+                </block>
+                <block wx:else>
+                  <text class="gold pkg-num-sm">定制</text>
+                </block>
+              </view>
+            </view>
+            <view class="pkg-dishes">{{item.dishes}}</view>
+            <view class="dim pkg-note">{{item.note}}</view>
+          </view>
+        </view>
+        <view class="dim pkg-tip">※ 以上为参考价，最终以沟通确认的菜单和实际食材结算为准</view>
+      </view>
+
+      <!-- ========== 客户评价 ========== -->
+      <view class="section" wx:if="{{reviews.length}}">
+        <view class="section-head">
+          <view class="section-title">客户怎么说</view>
+        </view>
+        <view class="card">
+          <view wx:for="{{reviews}}" wx:key="id" class="row review-row">
+            <view>
+              <view class="review-head">
+                <text class="h3">{{item.name}}</text>
+                <text class="tag">{{item.scene}}</text>
+              </view>
+              <view class="review-content">{{item.content}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- ========== 底部入口 ========== -->
+      <view class="section">
+        <view class="card link-card" bindtap="goAbout">
+          <text>服务说明 · 食材与结算方式</text>
+          <text class="dim">›</text>
+        </view>
+        <view class="card link-card" bindtap="goMy">
+          <text>我的预约</text>
+          <text class="dim">›</text>
+        </view>
+      </view>
+
+      <view class="gap"></view>
+      <view class="gap"></view>
+    </view>
+
+    <!-- ========== 底部固定操作 ========== -->
+    <view class="footer-bar footer-2">
+      <view class="btn btn-ghost footer-call" bindtap="callChef">电话咨询</view>
+      <view class="btn btn-primary footer-main" bindtap="goBooking">立即预约</view>
+    </view>
+
+  </block>
+</view>

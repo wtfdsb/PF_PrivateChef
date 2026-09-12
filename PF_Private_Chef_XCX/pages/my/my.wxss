@@ -1,0 +1,18 @@
+.bk { padding: 28rpx; margin-top: 24rpx; }
+.bk-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14rpx;
+}
+.status {
+  font-size: 23rpx;
+  color: #9a7a35;
+  background: rgba(200, 164, 92, .14);
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+.bk-line { font-size: 27rpx; line-height: 1.85; color: var(--text-2); }
+.bk-addr { word-break: break-all; }
+
+.empty-wrap { padding-top: 40rpx; }

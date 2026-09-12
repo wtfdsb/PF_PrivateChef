@@ -1,0 +1,44 @@
+<view class="page">
+  <view class="wrap">
+    <view class="done">
+      <view class="done-mark">✓</view>
+      <view class="h1 done-title">预约已提交</view>
+      <view class="muted done-sub">我会尽快联系您确认菜单与报价</view>
+    </view>
+
+    <view class="card info-card" wx:if="{{booking}}">
+      <view class="row">
+        <text class="label">档期</text>
+        <text>{{booking.date}} · {{booking.meal}}</text>
+      </view>
+      <view class="row">
+        <text class="label">人数</text>
+        <text>{{booking.people}} 人</text>
+      </view>
+      <view class="row">
+        <text class="label">预算</text>
+        <text>¥{{booking.budget}}</text>
+      </view>
+      <view class="row">
+        <text class="label">场地</text>
+        <text class="value-wrap">{{booking.address}}</text>
+      </view>
+      <view class="row">
+        <text class="label">联系人</text>
+        <text>{{booking.name}} · {{booking.phone}}</text>
+      </view>
+    </view>
+
+    <view class="tips">
+      <view class="tips-title">接下来会发生什么</view>
+      <view>1. 我会在 2 小时内联系您，确认菜单、口味和现场条件</view>
+      <view>2. 菜单确认后给出报价，您支付定金即算定档</view>
+      <view>3. 当天我提前到场，采买、烹饪、上菜、收尾</view>
+    </view>
+
+    <view class="actions">
+      <view class="btn btn-ghost" bindtap="goMy">查看我的预约</view>
+      <view class="btn btn-primary" bindtap="goHome">返回首页</view>
+    </view>
+  </view>
+</view>

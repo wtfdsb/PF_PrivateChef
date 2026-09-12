@@ -1,0 +1,25 @@
+# ===== IDE =====
+.idea/
+*.iml
+
+# ===== Maven 构建产物 =====
+target/
+
+# ===== 压缩包备份 =====
+*.zip
+
+# ===== 微信开发者工具私有配置（个人开发设置）=====
+project.private.config.json
+
+# ===== 根目录遗留的微信配置（真实项目在 PF_Private_Chef_XCX/）=====
+/project.config.json
+
+# ===== 日志 =====
+*.log
+
+# ===== Node =====
+node_modules/
+
+# ===== 系统文件 =====
+Thumbs.db
+.DS_Store

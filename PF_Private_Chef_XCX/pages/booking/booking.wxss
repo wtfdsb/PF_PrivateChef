@@ -1,0 +1,60 @@
+.head { padding: 44rpx 0 32rpx; }
+.head-sub { margin-top: 12rpx; line-height: 1.7; }
+
+.form-card { padding: 8rpx 28rpx; margin-bottom: 24rpx; }
+.form-title {
+  font-size: 26rpx;
+  color: #9a7a35;
+  letter-spacing: 2rpx;
+  padding: 24rpx 0 4rpx;
+}
+
+.label {
+  width: 200rpx;
+  flex-shrink: 0;
+  color: var(--text-2);
+  font-size: 27rpx;
+}
+.input {
+  flex: 1;
+  text-align: right;
+  font-size: 28rpx;
+  color: var(--text);
+}
+.picker-value {
+  color: var(--text);
+  font-size: 28rpx;
+}
+.ph-text { color: var(--text-3); font-size: 26rpx; }
+
+.row-top { align-items: flex-start; }
+.textarea {
+  flex: 1;
+  min-height: 120rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  text-align: left;
+  width: 100%;
+}
+.textarea-block {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.notice {
+  background: rgba(200, 164, 92, .08);
+  border: 1rpx solid rgba(200, 164, 92, .3);
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  font-size: 25rpx;
+  line-height: 1.9;
+  color: var(--text-2);
+}
+.notice-title {
+  color: #9a7a35;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.btn-disabled { opacity: .6; }
+.em { color: #9a7a35; font-weight: 600; }
