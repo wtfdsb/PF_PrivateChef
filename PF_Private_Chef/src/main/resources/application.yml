@@ -8,10 +8,10 @@ spring:
     name: pf-private-chef
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # ⚠️ 改成你自己的库；生产环境请用环境变量注入，不要提交明文密码
-    url: jdbc:mysql://127.0.0.1:3306/pf_private_chef?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    # 本机开发库。生产环境必须用环境变量注入，不要提交明文密码
+    url: jdbc:mysql://localhost:3306/pf_private_chef?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USER:root}
-    password: ${DB_PASSWORD:root}
+    password: ${DB_PASSWORD:123456}
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
