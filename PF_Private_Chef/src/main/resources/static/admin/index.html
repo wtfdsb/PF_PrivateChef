@@ -152,7 +152,10 @@
 <div id="mainView" class="hide">
   <header>
     <div class="t">新谷私厨<small>商家后台</small></div>
-    <div class="act" onclick="logout()">退出</div>
+    <div style="display:flex;gap:8px;">
+      <div class="act" onclick="testNotify()">测试推送</div>
+      <div class="act" onclick="logout()">退出</div>
+    </div>
   </header>
   <main>
     <div class="stats">
@@ -274,6 +277,68 @@ function logout() {
   showLogin()
 }
 
+/* ===== 微信推送 ===== */
+async function testNotify() {
+  toast('发送中…')
+  try {
+    var r = await api('/api/admin/notify/test', { method: 'POST', body: {} })
+    toast(r.sent ? '已发送，请查看微信' : '已发送')
+  } catch (e) {
+    toast(e.message)
+  }
+}
+
+/* ===== 自动刷新 + 新单提醒 ===== */
+var lastPending = -1
+setInterval(function () {
+  if (TOKEN && !document.hidden) silentRefresh()
+}, 60000)
+
+async function silentRefresh() {
+  try {
+    var s = await api('/api/admin/stats')
+    var p = Number(s.pending)
+    if (lastPending >= 0 && p > lastPending) {
+      toast('🔔 有新预约，请及时处理！')
+      tryBeep()
+      if (currentTab === 'bookings') loadBookings()
+    }
+    lastPending = p
+    document.getElementById('sPending').textContent = s.pending
+    document.getElementById('sConfirmed').textContent = s.confirmed
+    document.getElementById('sMaking').textContent = s.making
+    document.getElementById('sToday').textContent = s.today
+  } catch (e) { /* 静默忽略 */ }
+}
+
+function tryBeep() {
+  try {
+    var Ctx = window.AudioContext || window.webkitAudioContext
+    if (!Ctx) return
+    var ctx = new Ctx()
+    var o = ctx.createOscillator()
+    var g = ctx.createGain()
+    o.connect(g)
+    g.connect(ctx.destination)
+    o.frequency.value = 880
+    o.type = 'sine'
+    g.gain.value = 0.12
+    o.start()
+    o.stop(ctx.currentTime + 0.4)
+    setTimeout(function () {
+      var o2 = ctx.createOscillator()
+      var g2 = ctx.createGain()
+      o2.connect(g2)
+      g2.connect(ctx.destination)
+      o2.frequency.value = 660
+      o2.type = 'sine'
+      g2.gain.value = 0.1
+      o2.start()
+      o2.stop(ctx.currentTime + 0.4)
+    }, 250)
+  } catch (e) { /* 无音频权限时静默 */ }
+}
+
 /* ===== 页面切换 ===== */
 function switchTab(name) {
   currentTab = name
@@ -307,6 +372,7 @@ async function loadStats() {
     document.getElementById('sConfirmed').textContent = s.confirmed
     document.getElementById('sMaking').textContent = s.making
     document.getElementById('sToday').textContent = s.today
+    if (lastPending < 0) lastPending = Number(s.pending)
   } catch (e) { /* 忽略 */ }
 }
 

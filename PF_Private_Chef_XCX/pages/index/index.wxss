@@ -1,3 +1,14 @@
+/* ================= 骨架屏 ================= */
+.sk-page .wrap { padding-top: 40rpx; }
+.sk-hero { height: 560rpx; border-radius: 0; }
+.sk-title { height: 40rpx; width: 220rpx; margin: 24rpx 0; }
+.sk-title.w40 { width: 320rpx; margin-top: 44rpx; }
+.sk-title.w60 { width: 400rpx; margin-top: 44rpx; }
+.sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16rpx; }
+.sk-box { height: 140rpx; }
+.sk-row { height: 150rpx; margin-bottom: 20rpx; }
+.sk-card { height: 200rpx; margin-bottom: 20rpx; }
+
 /* ================= Hero：品牌 + 数据条 ================= */
 .hero {
   background:

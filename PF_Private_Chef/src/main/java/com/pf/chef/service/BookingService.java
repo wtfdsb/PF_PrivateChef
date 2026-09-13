@@ -35,6 +35,7 @@ public class BookingService {
     private final WxAuthService wxAuthService;
     private final WxUserMapper wxUserMapper;
     private final WxKfService wxKfService;
+    private final NotificationService notificationService;
 
     /** 同一手机号每天最多提交几单（防刷） */
     @Value("${pf.booking.max-per-phone-per-day:3}")
@@ -62,7 +63,18 @@ public class BookingService {
             throw new BizException("该档期已被约满，请换个日期或直接电话联系");
         }
 
-        // 2. 防刷：同一手机号当日提交数
+        // 2. 防重复：同一手机号同一档期只允许一单（防手滑连点/重复提交）
+        Long dupCount = bookingMapper.selectCount(
+                Wrappers.<Booking>lambdaQuery()
+                        .eq(Booking::getPhone, req.getPhone())
+                        .eq(Booking::getSlotDate, req.getDate())
+                        .eq(Booking::getMeal, req.getMeal())
+                        .ne(Booking::getStatus, Booking.CANCELED));
+        if (dupCount != null && dupCount > 0) {
+            throw new BizException("您已提交过该日期该餐次的预约，请勿重复提交，我会尽快联系您");
+        }
+
+        // 3. 防刷：同一手机号当日提交数
         Long todayCount = bookingMapper.selectCount(
                 Wrappers.<Booking>lambdaQuery()
                         .eq(Booking::getPhone, req.getPhone())
@@ -72,7 +84,7 @@ public class BookingService {
             throw new BizException("您当天提交的预约已达上限，我会尽快联系您，请勿重复提交");
         }
 
-        // 3. 落库
+        // 4. 落库
         Booking booking = new Booking();
         booking.setBookingNo(genBookingNo());
         booking.setName(req.getName());
@@ -103,7 +115,27 @@ public class BookingService {
         wxKfService.sendTextAsync(openid, "【新谷私厨】预约已收到：" + booking.getSlotDate() + " "
                 + booking.getMeal() + "，" + booking.getPeople() + "人。师傅会尽快电话联系您确认菜单与报价，请留意来电。"
                 + "（单号 " + booking.getBookingNo() + "）");
+
+        // 开发者微信推送：新订单立刻通知厨师（异步，未配置 PF_NOTIFY_KEY 时自动跳过）
+        notifyNewBooking(booking);
         return booking;
+    }
+
+    /** 新订单摘要推送到开发者微信（Server酱） */
+    private void notifyNewBooking(Booking b) {
+        String desp = "### 新预约 " + b.getBookingNo() + "\n\n"
+                + "- **档期**：" + b.getSlotDate() + " " + b.getMeal() + "\n"
+                + "- **人数**：" + b.getPeople() + " 人　**预算**：" + nvl(b.getBudget()) + "\n"
+                + "- **客户**：" + b.getName() + " " + b.getPhone() + "\n"
+                + "- **地址**：" + nvl(b.getAddress()) + "\n"
+                + "- **口味忌口**：" + nvl(b.getTaste()) + "\n"
+                + "- **特殊需求**：" + nvl(b.getNeeds()) + "\n"
+                + "- **备注**：" + nvl(b.getRemark()) + "　**渠道**：" + nvl(b.getChannel());
+        notificationService.pushAsync("【新谷私厨】新预约提醒", desp);
+    }
+
+    private static String nvl(String s) {
+        return s == null || s.isBlank() ? "（无）" : s;
     }
 
     /**

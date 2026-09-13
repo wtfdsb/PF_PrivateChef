@@ -23,3 +23,6 @@ node_modules/
 # ===== 系统文件 =====
 Thumbs.db
 .DS_Store
+
+# ===== DSH 工具产物 =====
+.dsh-vision-router/

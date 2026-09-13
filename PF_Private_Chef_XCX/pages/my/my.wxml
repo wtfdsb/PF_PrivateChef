@@ -3,21 +3,32 @@
     <view wx:if="{{loading}}" class="empty">正在加载…</view>
 
     <block wx:elif="{{list.length}}">
-      <view wx:for="{{list}}" wx:key="id" class="card bk">
+      <view wx:for="{{list}}" wx:key="id" class="card bk anim-up" style="animation-delay: {{index * 0.06}}s">
         <view class="bk-head">
           <view class="bk-title serif">{{item.date}} · {{item.meal}}</view>
           <view class="status st-{{item.status}}">{{statusText[item.status] || item.status}}</view>
         </view>
+
+        <!-- 进度时间线 -->
+        <view class="steps" wx:if="{{!item.canceled}}">
+          <view class="step st-{{st.state}}" wx:for="{{item.steps}}" wx:for-item="st" wx:key="name">
+            <view class="step-dot {{st.state}}"></view>
+            <view class="step-name {{st.state}}">{{st.name}}</view>
+          </view>
+        </view>
+        <view wx:else class="bk-canceled">该预约已取消</view>
+
         <view class="bk-line">{{item.people}} 人 · 预算 ¥{{item.budget}}</view>
         <view class="bk-line bk-addr">{{item.address}}</view>
         <view class="bk-line" wx:if="{{item.taste}}">忌口：{{item.taste}}</view>
         <view class="bk-line" wx:if="{{item.needs}}">需求：{{item.needs}}</view>
+        <view class="bk-no" wx:if="{{item.bookingNo}}">订单号 {{item.bookingNo}}</view>
         <view class="bk-dep">
           <block wx:if="{{item.depositStatus === 1}}">定金已收 ✓（档期已锁定）</block>
           <block wx:else>定金未收（请留意来电，确认后支付 20% 定金锁定档期）</block>
         </view>
         <view class="bk-actions">
-          <view class="bk-btn bk-btn-call" bindtap="callChef" data-phone="{{item.phone || chef.phone}}">电话联系</view>
+          <view class="bk-btn bk-btn-call" bindtap="callChef" data-phone="{{chef.phone}}">电话联系</view>
           <view class="bk-btn" bindtap="goBooking">再约一场</view>
         </view>
       </view>

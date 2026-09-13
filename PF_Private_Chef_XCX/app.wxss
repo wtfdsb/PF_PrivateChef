@@ -179,6 +179,18 @@ page {
   font-size: 26rpx;
 }
 
+/* ============ 骨架屏（加载占位，避免白屏） ============ */
+.sk {
+  background: linear-gradient(100deg, #ece4d6 40%, #f8f3ea 50%, #ece4d6 60%);
+  background-size: 200% 100%;
+  animation: skShine 1.4s ease infinite;
+  border-radius: 12rpx;
+}
+@keyframes skShine {
+  0% { background-position: 120% 0; }
+  100% { background-position: -80% 0; }
+}
+
 /* ============ 动画 ============ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30rpx); }

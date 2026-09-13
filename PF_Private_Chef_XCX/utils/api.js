@@ -188,16 +188,17 @@ async function submitBooking(payload) {
     createdAt: Date.now(),
   }
 
-  // 本地记住手机号，让「我的预约」在没有登录态时也能查到自己的单子
+  // 本地记住手机号/称呼，让「我的预约」和下次填表都有记忆
   // TODO(上线前): 接上 wx.login 后改为按登录态查询，去掉手机号兜底
   try {
     wx.setStorageSync('my_phone', payload.phone)
+    if (payload.name) wx.setStorageSync('my_name', payload.name)
   } catch (e) { /* 忽略存储失败 */ }
 
   if (cfg().useMock) {
     // 开发期：本地存一份，方便在「我的预约」里看到
     const list = wx.getStorageSync('mock_bookings') || []
-    const item = { ...body, id: `bk_${Date.now()}`, status: 'pending' }
+    const item = { ...body, id: `bk_${Date.now()}`, bookingNo: 'PF' + Date.now(), status: 'pending' }
     list.unshift(item)
     wx.setStorageSync('mock_bookings', list)
     return item

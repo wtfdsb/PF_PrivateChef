@@ -5,6 +5,9 @@ const BUDGETS = ['1000-2000', '2000-3500', '3500-5000', '5000-8000', '8000 以�
 /** 特殊需求快捷标签（点击自动填入） */
 const NEED_TAGS = ['摆盘仪式', '酒水代办', '餐后收拾', '代采购食材']
 
+/** 人数快捷选项 */
+const PEOPLE_TAGS = [6, 8, 10, 12, 16, 20]
+
 Page({
   data: {
     submitting: false,
@@ -17,6 +20,7 @@ Page({
     budgetOptions: BUDGETS,
     budgetIndex: 1,
     needTags: NEED_TAGS,
+    peopleTags: PEOPLE_TAGS,
 
     form: {
       name: '',
@@ -53,7 +57,22 @@ Page({
       if (j >= 0) mealIndex = j
     }
 
-    this.setData({ slots, dateOptions, dateIndex, mealIndex })
+    // 表单记忆：上次填过的称呼/手机号自动带出
+    let name = ''
+    let phone = ''
+    try {
+      name = wx.getStorageSync('my_name') || ''
+      phone = wx.getStorageSync('my_phone') || ''
+    } catch (e) { /* 忽略 */ }
+
+    this.setData({
+      slots,
+      dateOptions,
+      dateIndex,
+      mealIndex,
+      'form.name': name,
+      'form.phone': phone,
+    })
   },
 
   onInput(e) {
@@ -88,6 +107,13 @@ Page({
       next = cur ? cur + '、' + tag : tag
     }
     this.setData({ 'form.needs': next })
+  },
+
+  /** 点击人数快捷选项：填充或取消 */
+  onPeopleTag(e) {
+    const v = String(e.currentTarget.dataset.v)
+    const cur = String(this.data.form.people || '')
+    this.setData({ 'form.people': cur === v ? '' : v })
   },
 
   /** 提交预约 */

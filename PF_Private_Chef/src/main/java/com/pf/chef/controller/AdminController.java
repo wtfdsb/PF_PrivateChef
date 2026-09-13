@@ -10,6 +10,7 @@ import com.pf.chef.mapper.BookingMapper;
 import com.pf.chef.mapper.ReviewMapper;
 import com.pf.chef.service.AdminAuthService;
 import com.pf.chef.service.BookingService;
+import com.pf.chef.service.NotificationService;
 import com.pf.chef.service.SlotService;
 import com.pf.chef.service.WxKfService;
 import lombok.Data;
@@ -37,6 +38,7 @@ public class AdminController {
     private final BookingService bookingService;
     private final SlotService slotService;
     private final WxKfService wxKfService;
+    private final NotificationService notificationService;
     private final BookingMapper bookingMapper;
     private final ReviewMapper reviewMapper;
 
@@ -44,6 +46,23 @@ public class AdminController {
     @PostMapping("/login")
     public R<Map<String, Object>> login(@RequestBody LoginReq req) {
         return R.ok(adminAuthService.login(req.getUsername(), req.getPassword()));
+    }
+
+    /** 测试微信推送：给开发者微信发一条测试消息（验证 PF_NOTIFY_KEY 配置） */
+    @PostMapping("/notify/test")
+    public R<Map<String, Object>> notifyTest() {
+        if (!notificationService.enabled()) {
+            return R.fail(400, "未配置 PF_NOTIFY_KEY（Server酱 SendKey）。获取方法：sct.ftqq.com 微信扫码登录 → 复制 SendKey → 设置环境变量 PF_NOTIFY_KEY 后重启后端");
+        }
+        boolean ok = notificationService.push(
+                "【新谷私厨】测试通知",
+                "如果您在微信里收到这条消息，说明新订单微信推送已配置成功。今后每次有新预约，这里都会第一时间通知您。");
+        if (ok) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("sent", true);
+            return R.ok(m);
+        }
+        return R.fail(500, "推送失败，请检查 SendKey 是否正确");
     }
 
     /** 仪表盘统计：各状态单数 + 今日档期 */

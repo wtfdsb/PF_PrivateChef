@@ -37,6 +37,16 @@
         />
       </view>
 
+      <view class="people-tags">
+        <text
+          wx:for="{{peopleTags}}"
+          wx:key="*this"
+          class="people-tag {{form.people === '' + item ? 'on' : ''}}"
+          data-v="{{item}}"
+          bindtap="onPeopleTag"
+        >{{item}}人</text>
+      </view>
+
       <view class="row">
         <text class="label">预算</text>
         <picker mode="selector" range="{{budgetOptions}}" value="{{budgetIndex}}" bindchange="onBudgetChange">

@@ -1,7 +1,21 @@
 <view class="page">
 
-  <!-- 加载 / 错误 -->
-  <view wx:if="{{loading}}" class="empty">正在加载…</view>
+  <!-- 加载：骨架屏 -->
+  <view wx:if="{{loading}}" class="sk-page">
+    <view class="sk sk-hero"></view>
+    <view class="wrap">
+      <view class="sk sk-title"></view>
+      <view class="sk-grid">
+        <view class="sk sk-box" wx:for="{{[1,2,3,4]}}" wx:key="*this"></view>
+      </view>
+      <view class="sk sk-title w40"></view>
+      <view class="sk sk-row"></view>
+      <view class="sk sk-row"></view>
+      <view class="sk sk-title w60"></view>
+      <view class="sk sk-card"></view>
+      <view class="sk sk-card"></view>
+    </view>
+  </view>
   <view wx:elif="{{error}}" class="empty">
     <view>{{error}}</view>
     <view class="btn btn-ghost" style="margin:32rpx auto 0;width:300rpx;" bindtap="load">重试</view>

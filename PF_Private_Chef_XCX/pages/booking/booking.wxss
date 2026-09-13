@@ -61,6 +61,31 @@
 }
 .need-tag:active { background: rgba(201, 161, 94, .2); }
 
+/* 人数快捷选择 */
+.people-tags {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8rpx 0 20rpx 190rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+.people-tag {
+  font-size: 23rpx;
+  color: var(--text-2);
+  background: var(--paper);
+  border: 1rpx solid var(--line);
+  padding: 8rpx 22rpx;
+  border-radius: 999rpx;
+  margin: 0 14rpx 10rpx 0;
+  transition: all .15s ease;
+}
+.people-tag:active { transform: scale(.94); }
+.people-tag.on {
+  color: #241d16;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  border-color: transparent;
+  font-weight: 600;
+}
+
 .notice {
   background: rgba(201, 161, 94, .07);
   border: 1rpx solid rgba(201, 161, 94, .3);

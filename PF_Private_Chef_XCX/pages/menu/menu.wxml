@@ -5,7 +5,11 @@
       <view class="muted head-sub">{{chef.area}} · 按需定制，可按人数调整菜品</view>
     </view>
 
-    <view wx:if="{{loading}}" class="empty">正在加载…</view>
+    <view wx:if="{{loading}}" class="sk-menu">
+      <view class="sk" style="height:300rpx;margin-bottom:24rpx;"></view>
+      <view class="sk" style="height:360rpx;margin-bottom:24rpx;"></view>
+      <view class="sk" style="height:340rpx;"></view>
+    </view>
 
     <view
       wx:for="{{packages}}"
