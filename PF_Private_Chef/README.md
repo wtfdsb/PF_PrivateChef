@@ -129,6 +129,7 @@ src/main/java/com/pf/chef/
 | POST | `/api/bookings` | 提交预约（含口味忌口/特殊需求） | 公开（待收紧） |
 | GET | `/api/bookings/mine` | 我的预约 | 公开（待收紧） |
 | POST | `/api/admin/login` | 管理员登录 → `{token}` | 公开 |
+| POST | `/api/admin/notify/test` | 测试微信推送（Server酱） | 🔒 管理员 |
 | GET | `/api/admin/stats` | 仪表盘：各状态单数 | 🔒 管理员 |
 | GET | `/api/admin/bookings?status=&date=` | 后台：预约列表 | 🔒 管理员 |
 | POST | `/api/admin/bookings/{id}/status` | 后台：改状态 | 🔒 管理员 |
