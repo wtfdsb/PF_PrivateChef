@@ -6,13 +6,13 @@
  * 接后端时只改 utils/api.js，页面代码一行不用动。
  */
 const config = {
-  // 开发期用 true；接上后端后改为 false
-  useMock: true,
+  // 线上环境：直连微信云托管（云端 7×24，本地不用跑后端）
+  // 想回本地假数据调试：改成 true
+  useMock: false,
   // 后端基地址（useMock = false 时生效）
-  // 本地联调：http://localhost:8080  （开发者工具里记得勾「不校验合法域名」）
-  // 上线：部署到微信云托管后填默认域名，如 https://xxx.ap-shanghai.run.tcloudbase.com
-  //      并加入小程序 request 合法域名白名单（详见仓库根目录 DEPLOY-部署上线.md）
-  apiBase: 'http://localhost:8080',
+  // 云端：https://springboot-8oo4-313156-9-1487241248.sh.run.tcloudbase.com
+  // 本地联调：http://localhost:8080（开发者工具勾「不校验合法域名」）
+  apiBase: 'https://springboot-8oo4-313156-9-1487241248.sh.run.tcloudbase.com',
   // 厨师主体信息（会与远端数据合并，作为兜底）
   brand: {
     name: '新谷私厨',
