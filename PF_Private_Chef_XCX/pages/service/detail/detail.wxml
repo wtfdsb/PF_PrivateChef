@@ -38,7 +38,7 @@
 
       <!-- 价格 -->
       <view class="price-card anim-up d4">
-        <view class="price-label">大概花多少</view>
+        <view class="price-label">多少钱</view>
         <view class="price-value serif">{{item.priceNote}}</view>
       </view>
 

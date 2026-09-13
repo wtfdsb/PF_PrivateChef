@@ -141,7 +141,7 @@
                 <text class="pkg-rmb">¥</text><text class="pkg-num serif">{{item.startPrice}}</text><text class="pkg-from">起</text>
               </block>
               <block wx:else>
-                <text class="pkg-face serif">面议·定制</text>
+                <text class="pkg-face serif">面议</text>
               </block>
             </view>
           </view>
@@ -150,7 +150,7 @@
             <text wx:for="{{item.dishes}}" wx:for-item="d" wx:key="*this" class="chip">{{d}}</text>
           </view>
         </view>
-        <view class="dim pkg-tip">※ 起步参考价，最终按您确认的菜单和当天食材结算</view>
+        <view class="dim pkg-tip">※ 价格面议：菜单和人数定下来，跟师傅直接谈；食材实报实销</view>
       </view>
 
       <!-- ========== 最近做的席（图片位：images/case-1.jpg ~ case-6.jpg） ========== -->

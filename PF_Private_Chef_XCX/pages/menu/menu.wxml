@@ -25,7 +25,7 @@
             <text class="pkg-rmb">¥</text><text class="num serif">{{item.startPrice}}</text><text class="pkg-from">起</text>
           </block>
           <block wx:else>
-            <text class="num-sm serif">面议·定制</text>
+            <text class="num-sm serif">面议</text>
           </block>
         </view>
       </view>
@@ -37,8 +37,7 @@
       </view>
 
       <view class="pkg-cta" bindtap="goBooking">
-        <text wx:if="{{item.startPrice > 0}}">查看详情</text>
-        <text wx:else>立即预约</text>
+        <text>跟师傅聊聊这个档位</text>
         <text class="pkg-arrow">→</text>
       </view>
     </view>
@@ -47,7 +46,7 @@
       <view class="rule-title serif">定金和结算</view>
       <view>· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
       <view>· 余款<text class="em">餐后结算</text>；定金支持微信/支付宝/现金，线下收取</view>
-      <view>· 上表为<text class="em">起步参考价</text>，最终金额以您确认的菜单为准</view>
+      <view>· <text class="em">价格面议</text>：菜单和人数定下来，跟师傅直接谈</view>
       <view>· 食材<text class="em">实报实销</text>（提供采购小票），也可由您自行采购</view>
       <view>· 高档食材（参鲍翅肚、深海鱼等）单独报价；需外请帮厨、洗碗工时另计</view>
       <view>· 仅限平顶山市区；偏远区域加收上门里程费</view>
