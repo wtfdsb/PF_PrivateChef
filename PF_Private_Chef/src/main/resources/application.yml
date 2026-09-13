@@ -42,10 +42,13 @@ pf:
   booking:
     # Max bookings per phone per day (anti-spam)
     max-per-phone-per-day: 3
-  # ServerChan push to developer WeChat (https://sct.ftqq.com).
-  # Empty = push disabled. Set env var PF_NOTIFY_KEY to enable.
+  # WeChat push to developer (multi-channel, whichever configured takes effect):
+  #   1. PushPlus 200/day free after real-name: env PF_PUSHPLUS_TOKEN (https://www.pushplus.plus)
+  #   2. ServerChan 5/day free: env PF_NOTIFY_KEY (https://sct.ftqq.com)
+  # None set = push disabled.
   notify:
     key: ${PF_NOTIFY_KEY:}
+    pushplus-token: ${PF_PUSHPLUS_TOKEN:}
 
 logging:
   level:

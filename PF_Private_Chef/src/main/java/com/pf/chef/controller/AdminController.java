@@ -48,11 +48,11 @@ public class AdminController {
         return R.ok(adminAuthService.login(req.getUsername(), req.getPassword()));
     }
 
-    /** 测试微信推送：给开发者微信发一条测试消息（验证 PF_NOTIFY_KEY 配置） */
+    /** 测试微信推送：给开发者微信发一条测试消息（验证推送通道配置） */
     @PostMapping("/notify/test")
     public R<Map<String, Object>> notifyTest() {
         if (!notificationService.enabled()) {
-            return R.fail(400, "未配置 PF_NOTIFY_KEY（Server酱 SendKey）。获取方法：sct.ftqq.com 微信扫码登录 → 复制 SendKey → 设置环境变量 PF_NOTIFY_KEY 后重启后端");
+            return R.fail(400, "未配置推送通道。推荐 PushPlus（免费 200 条/天）：www.pushplus.plus 微信登录并实名 → 复制 token → 设置环境变量 PF_PUSHPLUS_TOKEN 后重启；或 Server酱：sct.ftqq.com → SendKey → 环境变量 PF_NOTIFY_KEY");
         }
         boolean ok = notificationService.push(
                 "【新谷私厨】测试通知",
@@ -62,7 +62,7 @@ public class AdminController {
             m.put("sent", true);
             return R.ok(m);
         }
-        return R.fail(500, "推送失败，请检查 SendKey 是否正确");
+        return R.fail(500, "推送失败，请检查推送通道配置是否正确");
     }
 
     /** 仪表盘统计：各状态单数 + 今日档期 */
