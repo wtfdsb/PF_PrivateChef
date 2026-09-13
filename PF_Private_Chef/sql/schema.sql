@@ -92,6 +92,29 @@ CREATE TABLE menu_package (
 ) ENGINE=InnoDB COMMENT='参考套餐档位';
 
 -- ------------------------------------------------------------
+-- 服务项目详情（首页「服务项目」每个入口的内容页）
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS service_item;
+CREATE TABLE service_item (
+  id           BIGINT       NOT NULL AUTO_INCREMENT,
+  code         VARCHAR(32)  NOT NULL COMMENT '唯一标识，如 family/birthday/business',
+  name         VARCHAR(32)  NOT NULL COMMENT '服务名称',
+  subtitle     VARCHAR(64)  DEFAULT NULL COMMENT '一句话副标题',
+  intro        VARCHAR(500) DEFAULT NULL COMMENT '介绍（说人话，别端着）',
+  scenes       TEXT         DEFAULT NULL COMMENT '适合场景 JSON 数组',
+  menu         TEXT         DEFAULT NULL COMMENT '常做的菜 JSON 数组',
+  price_note   VARCHAR(255) DEFAULT NULL COMMENT '价格说明',
+  prep         TEXT         DEFAULT NULL COMMENT '需要您准备的 JSON 数组',
+  tips         VARCHAR(500) DEFAULT NULL COMMENT '小提示',
+  sort         INT          NOT NULL DEFAULT 0,
+  status       TINYINT      NOT NULL DEFAULT 1,
+  deleted      TINYINT      NOT NULL DEFAULT 0,
+  created_at   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_code (code)
+) ENGINE=InnoDB COMMENT='服务项目详情';
+
+-- ------------------------------------------------------------
 -- 档期
 -- ------------------------------------------------------------
 DROP TABLE IF EXISTS schedule_slot;
@@ -116,6 +139,7 @@ CREATE TABLE booking (
   id            BIGINT       NOT NULL AUTO_INCREMENT,
   booking_no    VARCHAR(32)  NOT NULL COMMENT '预约单号',
   user_id       BIGINT       DEFAULT NULL COMMENT 'wx_user.id',
+  category      VARCHAR(32)  DEFAULT NULL COMMENT '服务项目 code（从哪个入口进来约的）',
   name          VARCHAR(32)  NOT NULL COMMENT '联系人',
   phone         VARCHAR(20)  NOT NULL,
   slot_date     DATE         NOT NULL,

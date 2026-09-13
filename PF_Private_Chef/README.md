@@ -123,8 +123,10 @@ src/main/java/com/pf/chef/
 | GET | `/api/cases?scene=&limit=` | 作品案例 | 公开 |
 | GET | `/api/cases/{id}` | 作品详情 | 公开 |
 | GET | `/api/packages` | 参考套餐（3 档，含起步价） | 公开 |
-| GET | `/api/slots?from=&to=` | 档期 | 公开 |
+| GET | `/api/slots?from=&to=` | 档期（自动补齐缺失日期） | 公开 |
 | GET | `/api/reviews` | 客户评价（仅已授权） | 公开 |
+| GET | `/api/services` | 服务项目列表（首页网格） | 公开 |
+| GET | `/api/services/{code}` | 服务项目详情（家庭聚餐/生日寿宴…） | 公开 |
 | POST | `/api/auth/login` | 微信登录 `{code}` → `{token, openid}` | 公开 |
 | POST | `/api/bookings` | 提交预约（含口味忌口/特殊需求） | 公开（待收紧） |
 | GET | `/api/bookings/mine` | 我的预约 | 公开（待收紧） |

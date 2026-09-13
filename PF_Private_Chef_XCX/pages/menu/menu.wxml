@@ -1,8 +1,8 @@
 <view class="page">
   <view class="wrap">
     <view class="head anim-up d1">
-      <view class="h1 serif">参考套餐</view>
-      <view class="muted head-sub">{{chef.area}} · 按需定制，可按人数调整菜品</view>
+      <view class="h1 serif">三档常做的席</view>
+      <view class="muted head-sub">{{chef.area}} · 人数菜量都能调，拿不准就打电话问</view>
     </view>
 
     <view wx:if="{{loading}}" class="sk-menu">
@@ -44,7 +44,7 @@
     </view>
 
     <view class="rule">
-      <view class="rule-title serif">定金与结算</view>
+      <view class="rule-title serif">定金和结算</view>
       <view>· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
       <view>· 余款<text class="em">餐后结算</text>；定金支持微信/支付宝/现金，线下收取</view>
       <view>· 上表为<text class="em">起步参考价</text>，最终金额以您确认的菜单为准</view>

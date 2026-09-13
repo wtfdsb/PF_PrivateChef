@@ -32,6 +32,9 @@ public class Booking {
     /** 关联 wx_user.id，未登录时可为空 */
     private Long userId;
 
+    /** 服务项目 code（客户从哪个入口进来约的），如 family/birthday */
+    private String category;
+
     private String name;
     private String phone;
 

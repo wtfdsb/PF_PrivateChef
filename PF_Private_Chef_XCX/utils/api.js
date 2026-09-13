@@ -156,6 +156,22 @@ async function listReviews() {
   return request('/api/reviews')
 }
 
+/** 服务项目列表（首页网格） */
+async function listServices() {
+  if (cfg().useMock) return mock.services.slice()
+  return request('/api/services')
+}
+
+/** 服务项目详情（按 code） */
+async function getServiceItem(code) {
+  if (cfg().useMock) {
+    const hit = mock.services.find((s) => s.code === code)
+    if (!hit) throw new Error('服务项目不存在')
+    return hit
+  }
+  return request(`/api/services/${code}`)
+}
+
 /**
  * 提交预约（核心写操作）
  * @param {object} payload
@@ -229,6 +245,8 @@ module.exports = {
   listPackages,
   listSlots,
   listReviews,
+  listServices,
+  getServiceItem,
   submitBooking,
   listMyBookings,
 }

@@ -34,13 +34,13 @@
       </view>
 
       <view class="card block anim-up d3">
-        <view class="block-title">这一场的关键点</view>
+        <view class="block-title">这一桌的关键</view>
         <view class="hl-text">{{item.highlight}}</view>
       </view>
 
       <view class="card block price-block anim-up d4">
         <view>
-          <view class="dim">本场参考价（含服务费）</view>
+          <view class="dim">这一桌的花费（参考）</view>
           <view class="gold price serif">¥{{item.refPrice}}</view>
         </view>
         <view class="dim price-note">食材实报实销\n最终以确认菜单为准</view>
@@ -49,7 +49,7 @@
       <view class="anim-up d5">
         <button class="kf-row" open-type="contact" hover-class="none">
           <view class="kf-ic kf-icon"></view>
-          <text>这场席面想要同款？在线客服聊聊 ›</text>
+          <text>想要差不多的？跟师傅聊聊 ›</text>
         </button>
       </view>
 

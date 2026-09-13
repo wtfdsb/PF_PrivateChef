@@ -3,7 +3,12 @@
 
     <view class="head anim-up d1">
       <view class="h1 serif">预约上门</view>
-      <view class="muted head-sub">仅限平顶山市区，偏远区域加收上门里程费。填完提交即可，我会尽快联系您确认菜单与报价。</view>
+      <view class="muted head-sub">平顶山市区，偏远地方加个里程费。填完提交，我尽快电话联系您。</view>
+    </view>
+
+    <!-- 从服务详情页带来的服务类型 -->
+    <view class="cat-chip anim-up d2" wx:if="{{categoryName}}">
+      想约的服务：<text class="cat-name">{{categoryName}}</text>
     </view>
 
     <!-- ========== 档期 ========== -->

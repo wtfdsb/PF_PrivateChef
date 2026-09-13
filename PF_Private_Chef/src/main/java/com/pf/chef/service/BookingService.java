@@ -87,6 +87,7 @@ public class BookingService {
         // 4. 落库
         Booking booking = new Booking();
         booking.setBookingNo(genBookingNo());
+        booking.setCategory(req.getCategory());
         booking.setName(req.getName());
         booking.setPhone(req.getPhone());
         booking.setSlotDate(req.getDate());
@@ -127,6 +128,7 @@ public class BookingService {
                 + "- **档期**：" + b.getSlotDate() + " " + b.getMeal() + "\n"
                 + "- **人数**：" + b.getPeople() + " 人　**预算**：" + nvl(b.getBudget()) + "\n"
                 + "- **客户**：" + b.getName() + " " + b.getPhone() + "\n"
+                + "- **服务项目**：" + nvl(b.getCategory()) + "\n"
                 + "- **地址**：" + nvl(b.getAddress()) + "\n"
                 + "- **口味忌口**：" + nvl(b.getTaste()) + "\n"
                 + "- **特殊需求**：" + nvl(b.getNeeds()) + "\n"

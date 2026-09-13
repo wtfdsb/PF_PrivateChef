@@ -401,6 +401,7 @@ async function loadBookings() {
         '</div>' +
         '<div class="info">' +
           '<div class="l">客户</div><div class="v">' + esc(b.name) + ' · <a class="phone" href="tel:' + esc(b.phone) + '">' + esc(b.phone) + '</a> · ' + Number(b.people) + '人' + (b.budget ? ' · 预算¥' + esc(b.budget) : '') + '</div>' +
+          (b.category ? '<div class="l">服务项目</div><div class="v">' + esc(b.category) + '</div>' : '') +
           (b.address ? '<div class="l">场地地址</div><div class="v">' + esc(b.address) + '</div>' : '') +
           (b.taste ? '<div class="l">口味与忌口</div><div class="v">' + esc(b.taste) + '</div>' : '') +
           (b.needs ? '<div class="l">特殊需求</div><div class="v">' + esc(b.needs) + '</div>' : '') +

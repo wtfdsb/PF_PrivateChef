@@ -2,7 +2,7 @@
   <view class="wrap">
     <view class="head anim-up d1">
       <view class="h1 serif">服务说明</view>
-      <view class="muted head-sub">把规则说在前面，合作起来省心</view>
+      <view class="muted head-sub">丑话说在前头，合作起来省心</view>
     </view>
 
     <!-- 在线客服 -->
@@ -31,7 +31,7 @@
     </view>
 
     <view class="card block anim-up d4">
-      <view class="block-title">服务流程</view>
+      <view class="block-title">流程</view>
       <view wx:for="{{chef.flow}}" wx:key="step" class="flow">
         <text class="flow-step serif">{{item.step}}</text>
         <view>
@@ -42,7 +42,7 @@
     </view>
 
     <view class="card block anim-up d5">
-      <view class="block-title">定金与收费</view>
+      <view class="block-title">定金和收费</view>
       <view class="line">· 预约需支付 <text class="em">20% 定金</text>锁定档期，提前 2 天可免费改期</view>
       <view class="line">· 余款<text class="em">餐后结算</text>，支持微信/支付宝/现金，线下收取</view>
       <view class="line">· <text class="em">服务费</text>：按桌或按人计价，菜单确认后报价</view>
@@ -51,14 +51,14 @@
     </view>
 
     <view class="card block anim-up d6">
-      <view class="block-title">改期与取消</view>
+      <view class="block-title">改期和取消</view>
       <view class="line">· 提前 <text class="em">2 天</text> 以上：免费改期，定金可退</view>
       <view class="line">· 2 天以内改期/取消：定金不退（食材多已采买）</view>
       <view class="line">· 因不可抗力（天气、突发疾病）双方协商处理</view>
     </view>
 
     <view class="card block anim-up d7">
-      <view class="block-title">卫生与安全</view>
+      <view class="block-title">卫生这件事</view>
       <view class="line">· 持有效<text class="em">健康证</text>上岗</view>
       <view class="line">· 生熟分开、食材当日采买、按需留样</view>
       <view class="line">· 有过敏或忌口的客人请在预约时务必注明</view>
@@ -66,9 +66,16 @@
     </view>
 
     <view class="card block anim-up d8">
-      <view class="block-title">服务范围</view>
+      <view class="block-title">能去的地方</view>
       <view class="line">{{chef.area}}</view>
       <view class="line">超出范围可协商出行费用</view>
+    </view>
+
+    <view class="card block anim-up d8">
+      <view class="block-title">隐私说明</view>
+      <view class="line">· 您填的称呼、电话、地址只用于本次预约的沟通和上门服务，不会用于其他用途</view>
+      <view class="line">· 微信登录只获取匿名标识（openid），用于关联您的预约记录和消息通知</view>
+      <view class="line">· 不做营销群发，不卖数据，不做任何第三方共享</view>
     </view>
 
     <view class="contact anim-up d8" bindtap="callChef">

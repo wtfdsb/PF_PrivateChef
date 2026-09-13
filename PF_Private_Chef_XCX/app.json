@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/service/detail/detail",
     "pages/case/detail/detail",
     "pages/menu/menu",
     "pages/booking/booking",

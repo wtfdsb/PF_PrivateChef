@@ -45,10 +45,10 @@
     </view>
 
     <view class="tips anim-up d4">
-      <view class="tips-title serif">接下来会发生什么</view>
-      <view>1. 我会尽快联系您，确认菜单、口味和现场条件</view>
-      <view>2. 菜单确认后给出报价，您支付 20% 定金即锁定档期</view>
-      <view>3. 余款餐后结算；当天我提前到场，采买、烹饪、上菜、收尾</view>
+      <view class="tips-title serif">接下来就三步</view>
+      <view>1. 我尽快联系您，确认菜单、口味和现场条件</view>
+      <view>2. 菜单定了给报价，您付 20% 定金锁档期</view>
+      <view>3. 余款吃完再结；当天我提前到，买菜、做菜、收拾，您就等着开饭</view>
     </view>
 
     <button class="kf-hint anim-up d5" open-type="contact" hover-class="none">

@@ -8,6 +8,8 @@ Page({
     cases: [],
     packages: [],
     reviews: [],
+    /** 服务项目（来自 /api/services，兜底 chef.services） */
+    services: [],
     /** 最近可约的几个档期，用于首页快捷展示 */
     nextSlots: [],
     /** Hero 数据条滚动数字 */
@@ -35,11 +37,19 @@ Page({
         api.listSlots(),
         api.listReviews(),
       ])
+      // 服务项目单独取，挂了就用厨师名片里的兜底，不影响首页
+      let services = []
+      try {
+        services = await api.listServices()
+      } catch (e) {
+        services = (chef && chef.services) || []
+      }
       this.setData({
         chef,
         cases,
         packages,
         reviews,
+        services,
         nextSlots: slots.filter((s) => s.status === 'open').slice(0, 6),
         loading: false,
       })
@@ -96,6 +106,14 @@ Page({
 
   goCase(e) {
     wx.navigateTo({ url: `/pages/case/detail/detail?id=${e.currentTarget.dataset.id}` })
+  },
+
+  /** 服务项目 → 详情页（每个项目都有自己的内容） */
+  goService(e) {
+    const code = e.currentTarget.dataset.code
+    if (code) {
+      wx.navigateTo({ url: `/pages/service/detail/detail?code=${code}` })
+    }
   },
 
   goMenu() {

@@ -42,7 +42,7 @@
       </view>
 
       <view class="hero-slogan serif anim-up d2">把星级宴席搬进您家</view>
-      <view class="hero-sub anim-up d3">八大菜系、精品海鲜、海鲜姿造、高端火锅，名厨亲自掌勺</view>
+      <view class="hero-sub anim-up d3">平顶山市区，提前一两天约。买菜、掌勺、收拾，都不用您操心。</view>
 
       <view class="hero-badges anim-up d3">
         <text wx:if="{{chef.awards}}" class="tag-dark">{{chef.awards}}</text>
@@ -78,19 +78,20 @@
       <!-- ========== 服务项目 ========== -->
       <view class="section anim-up d3">
         <view class="section-head">
-          <view class="section-title">服务项目</view>
-          <view class="section-more">按需定制</view>
+          <view class="section-title">按场合来选</view>
+          <view class="section-more">菜都可以商量</view>
         </view>
         <view class="svc-grid">
           <view
-            wx:for="{{chef.services}}"
-            wx:key="name"
+            wx:for="{{services}}"
+            wx:key="code"
             class="svc-item anim-pop"
             style="animation-delay: {{0.18 + index * 0.06}}s"
-            bindtap="goBooking"
+            data-code="{{item.code}}"
+            bindtap="goService"
           >
             <view class="svc-name">{{item.name}}</view>
-            <view class="svc-desc">{{item.desc}}</view>
+            <view class="svc-desc">{{item.subtitle}}</view>
           </view>
         </view>
       </view>
@@ -98,8 +99,8 @@
       <!-- ========== 近期可约档期 ========== -->
       <view class="section anim-up d4">
         <view class="section-head">
-          <view class="section-title">近期档期</view>
-          <view class="section-more" bindtap="goBooking">查看全部 ›</view>
+          <view class="section-title">最近能约的日子</view>
+          <view class="section-more" bindtap="goBooking">看看更多 ›</view>
         </view>
         <scroll-view class="slot-scroll" scroll-x enable-flex>
           <view
@@ -115,14 +116,14 @@
             <view class="slot-meal">{{item.meal}} 可约</view>
           </view>
         </scroll-view>
-        <view class="dim" style="margin-top:12rpx;">档期有限，点选日期可直接预约；也可直接电话沟通</view>
+        <view class="dim" style="margin-top:12rpx;">档期有限，点选日期可直接预约；拿不准就打电话问</view>
       </view>
 
-      <!-- ========== 热销套餐 ========== -->
+      <!-- ========== 套餐 ========== -->
       <view class="section anim-up d5">
         <view class="section-head">
-          <view class="section-title">热销套餐</view>
-          <view class="section-more" bindtap="goMenu">查看全部套餐 ›</view>
+          <view class="section-title">常点的三档</view>
+          <view class="section-more" bindtap="goMenu">看看每档都有啥 ›</view>
         </view>
         <view
           wx:for="{{packages}}"
@@ -149,14 +150,14 @@
             <text wx:for="{{item.dishes}}" wx:for-item="d" wx:key="*this" class="chip">{{d}}</text>
           </view>
         </view>
-        <view class="dim pkg-tip">※ 以上为起步参考价，最终以沟通确认的菜单和实际食材结算为准</view>
+        <view class="dim pkg-tip">※ 起步参考价，最终按您确认的菜单和当天食材结算</view>
       </view>
 
-      <!-- ========== 菜品案例（图片位：images/case-1.jpg ~ case-6.jpg） ========== -->
+      <!-- ========== 最近做的席（图片位：images/case-1.jpg ~ case-6.jpg） ========== -->
       <view class="section anim-up d6">
         <view class="section-head">
-          <view class="section-title">菜品案例</view>
-          <view class="section-more">查看更多 ›</view>
+          <view class="section-title">最近做的席</view>
+          <view class="section-more">点进去看菜单 ›</view>
         </view>
         <scroll-view class="case-scroll" scroll-x enable-flex>
           <view
@@ -187,10 +188,10 @@
         </scroll-view>
       </view>
 
-      <!-- ========== 服务流程 ========== -->
+      <!-- ========== 定了以后怎么办 ========== -->
       <view class="section anim-up d7">
         <view class="section-head">
-          <view class="section-title">怎么合作</view>
+          <view class="section-title">定下来以后</view>
         </view>
         <view class="card-ink flow-card">
           <view wx:for="{{chef.flow}}" wx:key="step" class="flow-item">
@@ -203,10 +204,10 @@
         </view>
       </view>
 
-      <!-- ========== 客户评价 ========== -->
+      <!-- ========== 老客户怎么说 ========== -->
       <view class="section anim-up d8" wx:if="{{reviews.length}}">
         <view class="section-head">
-          <view class="section-title">客户怎么说</view>
+          <view class="section-title">老客户怎么说</view>
         </view>
         <view class="card">
           <view wx:for="{{reviews}}" wx:key="id" class="row review-row">
@@ -221,10 +222,10 @@
         </view>
       </view>
 
-      <!-- ========== 服务承诺 ========== -->
+      <!-- ========== 说好的事 ========== -->
       <view class="section anim-up d8">
         <view class="section-head">
-          <view class="section-title">服务承诺</view>
+          <view class="section-title">说好的事</view>
         </view>
         <view class="card-ink promise-card">
           <view class="promise">
@@ -247,7 +248,7 @@
       <!-- ========== 底部入口 ========== -->
       <view class="section anim-up d8">
         <view class="card link-card" bindtap="goAbout">
-          <text>服务说明 · 收费与定金规则</text>
+          <text>收费和定金，一条条说清楚</text>
           <text class="dim">›</text>
         </view>
         <view class="card link-card" bindtap="goMy">

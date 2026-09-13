@@ -21,6 +21,9 @@ Page({
     budgetIndex: 1,
     needTags: NEED_TAGS,
     peopleTags: PEOPLE_TAGS,
+    /** 从服务详情页带过来的服务类型 */
+    category: '',
+    categoryName: '',
 
     form: {
       name: '',
@@ -72,6 +75,8 @@ Page({
       mealIndex,
       'form.name': name,
       'form.phone': phone,
+      category: query.category || '',
+      categoryName: query.categoryName ? decodeURIComponent(query.categoryName) : '',
     })
   },
 
@@ -137,6 +142,7 @@ Page({
         date,
         meal,
         budget: budgetOptions[budgetIndex],
+        category: this.data.category || undefined,
       })
       getApp().globalData.lastBooking = booking
 

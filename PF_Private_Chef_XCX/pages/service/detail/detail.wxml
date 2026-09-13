@@ -1,0 +1,70 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="wrap" style="padding-top:40rpx;">
+    <view class="sk" style="height:240rpx;margin-bottom:24rpx;"></view>
+    <view class="sk" style="height:200rpx;margin-bottom:24rpx;"></view>
+    <view class="sk" style="height:280rpx;"></view>
+  </view>
+  <view wx:elif="{{error}}" class="empty">{{error}}</view>
+
+  <block wx:else>
+    <view class="wrap">
+
+      <!-- 头：名称 + 副标题 + 人话介绍 -->
+      <view class="head anim-up d1">
+        <view class="h1 serif">{{item.name}}</view>
+        <view class="subtitle">{{item.subtitle}}</view>
+        <view class="intro">{{item.intro}}</view>
+      </view>
+
+      <!-- 适合这些场合 -->
+      <view class="card block anim-up d2">
+        <view class="block-title">适合这些场合</view>
+        <view class="scene-list">
+          <text wx:for="{{item.scenes}}" wx:key="*this" class="scene-chip">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 常做的菜 -->
+      <view class="card block anim-up d3">
+        <view class="block-title">这一桌常做的菜</view>
+        <view class="menu-list">
+          <view wx:for="{{item.menu}}" wx:key="*this" class="menu-line">
+            <text class="menu-dot">·</text>
+            <text>{{item}}</text>
+          </view>
+        </view>
+        <view class="menu-note">菜单可以换，提前跟我说就行</view>
+      </view>
+
+      <!-- 价格 -->
+      <view class="price-card anim-up d4">
+        <view class="price-label">大概花多少</view>
+        <view class="price-value serif">{{item.priceNote}}</view>
+      </view>
+
+      <!-- 您需要准备 -->
+      <view class="card block anim-up d5">
+        <view class="block-title">您需要准备的</view>
+        <view wx:for="{{item.prep}}" wx:key="*this" class="prep-line">
+          <text class="prep-mark">✓</text>
+          <text>{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 小提示 -->
+      <view class="tips-card anim-up d6">
+        <text class="tips-quote serif">“</text>
+        <text class="tips-text">{{item.tips}}</text>
+      </view>
+
+      <view class="gap"></view>
+      <view class="gap"></view>
+    </view>
+
+    <!-- 底部操作 -->
+    <view class="footer-bar footer-2 anim-up d7">
+      <view class="btn btn-ghost footer-call" bindtap="callChef">先打个电话</view>
+      <view class="btn btn-primary footer-main" bindtap="goBooking">约这个服务</view>
+    </view>
+  </block>
+</view>

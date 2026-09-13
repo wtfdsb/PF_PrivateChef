@@ -21,6 +21,10 @@ public class BookingCreateReq {
     @Size(max = 32, message = "称呼太长了")
     private String name;
 
+    /** 服务项目 code（可选，从服务详情页带过来），如 family/birthday */
+    @Size(max = 32)
+    private String category;
+
     @NotBlank(message = "请填写手机号")
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "请填写正确的手机号")
     private String phone;
