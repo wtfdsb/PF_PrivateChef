@@ -29,10 +29,17 @@ public class GlobalExceptionHandler {
         return R.fail(400, msg);
     }
 
-    /** 兜底：不把堆栈暴露给前端，但日志要留全 */
+    /** 兜底：不把堆栈暴露给前端，但日志要留全。
+     *  带异常类型是为了远程排障（私用系统，不含敏感信息） */
     @ExceptionHandler(Exception.class)
     public R<Void> handleOther(Exception e) {
         log.error("系统异常", e);
-        return R.fail(500, "服务开小差了，请稍后再试");
+        String detail = e.getClass().getSimpleName()
+                + (e.getMessage() != null && !e.getMessage().isBlank() ? ": " + e.getMessage() : "");
+        // 截断，防止长文本刷屏
+        if (detail.length() > 160) {
+            detail = detail.substring(0, 160) + "...";
+        }
+        return R.fail(500, "服务开小差了（" + detail + "）");
     }
 }
