@@ -13,6 +13,7 @@ on:
     branches: [main]
     paths:
       - 'PF_Private_Chef/**'
+      - 'Dockerfile'
   workflow_dispatch:
 
 jobs:
