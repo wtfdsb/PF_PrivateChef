@@ -51,12 +51,13 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.5.5",
-  "appid": "wx1629a6b4060fa83c",
+  "appid": "wx45327e7181e4ce5a",
   "projectname": "sichu-miniprogram",
   "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "simulatorPluginLibVersion": {}
+  "simulatorPluginLibVersion": {},
+  "isGameTourist": false
 }
