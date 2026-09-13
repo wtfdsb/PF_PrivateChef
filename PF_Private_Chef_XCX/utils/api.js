@@ -57,10 +57,19 @@ function request(path, { method = 'GET', data = {}, header = {} } = {}) {
   return new Promise((resolve, reject) => {
     const h = { 'content-type': 'application/json', ...header }
     if (_token) h.Authorization = `Bearer ${_token}`
+    // GET 请求剔除空值参数，避免序列化成 ?from=undefined 打爆后端
+    let cleanData = data
+    if (method === 'GET' && data && typeof data === 'object') {
+      cleanData = {}
+      Object.keys(data).forEach((k) => {
+        const v = data[k]
+        if (v !== undefined && v !== null && v !== '') cleanData[k] = v
+      })
+    }
     wx.request({
       url: `${c.apiBase}${path}`,
       method,
-      data,
+      data: cleanData,
       header: h,
       timeout: 15000,
       success(res) {

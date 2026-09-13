@@ -38,7 +38,12 @@ Page({
   },
 
   async onLoad(query) {
-    const slots = (await api.listSlots()).filter((s) => s.status === 'open')
+    let slots = []
+    try {
+      slots = (await api.listSlots()).filter((s) => s.status === 'open')
+    } catch (e) {
+      wx.showToast({ title: '档期加载失败，请下拉重试或电话联系', icon: 'none' })
+    }
 
     const seen = new Set()
     const dateOptions = []
