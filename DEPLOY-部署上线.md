@@ -17,20 +17,26 @@
 3. 环境里开通 **云数据库 MySQL**（或直接购买腾讯云 MySQL，两者互通）
 4. 在数据库控制台新建库 `pf_private_chef`（utf8mb4）
 5. 执行本仓库的 `PF_Private_Chef/sql/schema.sql` 和 `data.sql`（云数据库控制台支持直接执行 SQL）
-6. 记下数据库的**内网地址、账号、密码**（后面要填环境变量）
+6. 记下数据库的**内网地址、端口、账号、密码**（后面要填环境变量）
 
 ### 第二步：部署后端到云托管
 1. 云开发控制台 → 「云托管」→ 创建服务
-2. 部署方式选「代码仓库」或「本地文件夹上传」；构建目录选 `PF_Private_Chef`
-   （仓库里已带 `Dockerfile`，会自动多阶段构建）
+2. 部署方式选「代码仓库」→ 绑定 GitHub 账号 → 选仓库 `PF_Private_Chef`，
+   构建目录填 `PF_Private_Chef`（仓库内已带 `Dockerfile`，自动多阶段构建，已配阿里云镜像加速）
 3. 配置环境变量：
 
 | 变量 | 值 |
 |---|---|
+| `DB_HOST` | 云数据库内网地址（形如 10.x.x.x） |
+| `DB_PORT` | 3306 |
+| `DB_NAME` | pf_private_chef |
 | `DB_USER` | 云数据库账号 |
 | `DB_PASSWORD` | 云数据库密码 |
-| `DB_HOST` | 云数据库内网地址（形如 10.x.x.x） |
-| `PF_TOKEN_SECRET` | 随机长字符串（自己乱敲一串，如 `Xg#91mQz`） |
+| `WX_APPID` | wx45327e7181e4ce5a |
+| `WX_SECRET` | 你新小程序的 AppSecret |
+| `WX_MOCK_LOGIN` | false |
+| `PF_TOKEN_SECRET` | 随机长字符串（乱敲一串） |
+| `PF_NOTIFY_KEY` | Server酱 SendKey（新订单微信推送，也可配 PF_PUSHPLUS_TOKEN） |
 | `TZ` | Asia/Shanghai |
 
 4. 端口填 `8080`，最小实例数设 `0`（省成本，来请求自动拉起，冷启动约 5-10 秒）
