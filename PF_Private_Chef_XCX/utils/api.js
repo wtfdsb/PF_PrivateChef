@@ -36,7 +36,7 @@ async function ensureLogin() {
     wx.login({
       success: async (res) => {
         try {
-          const data = await request('/api/auth/login', { method: 'POST', data: { code: res.code } })
+          const data = await call('/api/auth/login', { method: 'POST', data: { code: res.code } })
           _token = (data && data.token) || ''
           resolve(_token)
         } catch (e) {
@@ -50,7 +50,7 @@ async function ensureLogin() {
 }
 
 /* ============================================================
- * HTTP 通道（接 Java 后端时启用）
+ * HTTP 通道（mode=http：本地联调或公网域名）
  * ========================================================== */
 function request(path, { method = 'GET', data = {}, header = {} } = {}) {
   const c = cfg()
@@ -87,6 +87,53 @@ function request(path, { method = 'GET', data = {}, header = {} } = {}) {
 }
 
 /* ============================================================
+ * 云调用通道（mode=cloud：wx.cloud.callContainer 直连云托管）
+ * 微信内部直连，无需 request 合法域名、无需备案
+ * ========================================================== */
+function cloudRequest(path, { method = 'GET', data = {}, header = {} } = {}) {
+  const c = cfg()
+  return new Promise((resolve, reject) => {
+    // GET 参数拼进 path；剔除空值
+    let fullPath = path
+    if (method === 'GET' && data && typeof data === 'object') {
+      const qs = []
+      Object.keys(data).forEach((k) => {
+        const v = data[k]
+        if (v !== undefined && v !== null && v !== '') qs.push(`${k}=${encodeURIComponent(v)}`)
+      })
+      if (qs.length) fullPath = `${path}${path.indexOf('?') >= 0 ? '&' : '?'}${qs.join('&')}`
+    }
+    wx.cloud.callContainer({
+      config: { env: c.cloudEnv },
+      path: fullPath,
+      method,
+      header: { 'content-type': 'application/json', 'X-WX-SERVICE': c.serviceName, ...header },
+      data: method === 'GET' ? undefined : data,
+      success(res) {
+        const d = res && res.data
+        if (res && res.statusCode >= 200 && res.statusCode < 300 && d && d.code === 0) {
+          resolve(d.data)
+        } else {
+          reject(new Error((d && d.msg) || `请求失败(${res && res.statusCode})`))
+        }
+      },
+      fail(err) {
+        reject(new Error((err && err.errMsg) || '网络异常'))
+      },
+    })
+  })
+}
+
+/** 按配置自动选择通道 */
+function call(path, opts) {
+  const c = cfg()
+  if (c.mode === 'cloud' && wx.cloud && wx.cloud.callContainer) {
+    return cloudRequest(path, opts)
+  }
+  return request(path, opts)
+}
+
+/* ============================================================
  * 云开发通道（接 CloudBase 时启用）
  * ========================================================== */
 async function cloudCall(name, data = {}) {
@@ -111,7 +158,7 @@ async function getChef() {
   } else {
     // 二选一：
     // chef = await cloudCall('getChef')
-    chef = await request('/api/chef')
+    chef = await call('/api/chef')
   }
   getApp().globalData.chef = chef
   return chef
@@ -125,7 +172,7 @@ async function listCases({ scene = '', limit = 20 } = {}) {
     return list.slice(0, limit)
   }
   // return cloudCall('listCases', { scene, limit })
-  return request('/api/cases', { data: { scene, limit } })
+  return call('/api/cases', { data: { scene, limit } })
 }
 
 /** 作品详情 */
@@ -136,14 +183,14 @@ async function getCase(id) {
     return hit
   }
   // return cloudCall('getCase', { id })
-  return request(`/api/cases/${id}`)
+  return call(`/api/cases/${id}`)
 }
 
 /** 参考套餐 */
 async function listPackages() {
   if (cfg().useMock) return mock.packages.slice()
   // return cloudCall('listPackages')
-  return request('/api/packages')
+  return call('/api/packages')
 }
 
 /** 档期（默认可约的未来 30 天） */
@@ -155,20 +202,20 @@ async function listSlots({ from, to } = {}) {
     return list
   }
   // return cloudCall('listSlots', { from, to })
-  return request('/api/slots', { data: { from, to } })
+  return call('/api/slots', { data: { from, to } })
 }
 
 /** 客户评价 */
 async function listReviews() {
   if (cfg().useMock) return mock.reviews.slice()
   // return cloudCall('listReviews')
-  return request('/api/reviews')
+  return call('/api/reviews')
 }
 
 /** 服务项目列表（首页网格） */
 async function listServices() {
   if (cfg().useMock) return mock.services.slice()
-  return request('/api/services')
+  return call('/api/services')
 }
 
 /** 服务项目详情（按 code） */
@@ -178,7 +225,7 @@ async function getServiceItem(code) {
     if (!hit) throw new Error('服务项目不存在')
     return hit
   }
-  return request(`/api/services/${code}`)
+  return call(`/api/services/${code}`)
 }
 
 /**
@@ -231,7 +278,7 @@ async function submitBooking(payload) {
   // 先静默登录，让后端把预约关联到 openid（客服消息/我的预约都靠它）
   await ensureLogin()
   // return cloudCall('submitBooking', body)
-  return request('/api/bookings', { method: 'POST', data: body })
+  return call('/api/bookings', { method: 'POST', data: body })
 }
 
 /** 我的预约（同一微信 / 同一手机号下的预约记录） */
@@ -244,7 +291,7 @@ async function listMyBookings() {
   try {
     phone = wx.getStorageSync('my_phone') || ''
   } catch (e) { /* 忽略 */ }
-  return request('/api/bookings/mine', { data: { phone } })
+  return call('/api/bookings/mine', { data: { phone } })
 }
 
 module.exports = {
