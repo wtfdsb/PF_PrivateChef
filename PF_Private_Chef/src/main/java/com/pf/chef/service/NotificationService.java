@@ -52,17 +52,25 @@ public class NotificationService {
     /**
      * 推送到开发者微信
      *
-     * @return 是否推送成功；未配置 / 失败均返回 false，不影响业务
+     * 策略：PushPlus 优先（额度高），失败自动回退 Server酱；
+     * 都没配置或都失败则返回 false，不影响业务。
      */
     @SuppressWarnings("unchecked")
     public boolean push(String title, String desp) {
-        if (pushplusToken != null && !pushplusToken.isBlank()) {
-            return pushPushplus(title, desp);
+        boolean hasPushplus = pushplusToken != null && !pushplusToken.isBlank();
+        boolean hasServerchan = sendKey != null && !sendKey.isBlank();
+
+        if (hasPushplus && pushPushplus(title, desp)) {
+            return true;
         }
-        if (sendKey != null && !sendKey.isBlank()) {
-            return pushServerchan(title, desp);
+        if (hasServerchan && pushServerchan(title, desp)) {
+            return true;
         }
-        log.info("通知跳过：未配置 PF_PUSHPLUS_TOKEN / PF_NOTIFY_KEY");
+        if (!hasPushplus && !hasServerchan) {
+            log.info("通知跳过：未配置 PF_PUSHPLUS_TOKEN / PF_NOTIFY_KEY");
+        } else {
+            log.warn("通知发送失败：所有已配置通道均未成功（PushPlus={} Server酱={}）", hasPushplus, hasServerchan);
+        }
         return false;
     }
 
@@ -123,7 +131,9 @@ public class NotificationService {
 
     /** 异步推送，不阻塞主业务流程 */
     public void pushAsync(String title, String desp) {
-        if (!enabled()) {
+        boolean any = (sendKey != null && !sendKey.isBlank())
+                || (pushplusToken != null && !pushplusToken.isBlank());
+        if (!any) {
             return;
         }
         CompletableFuture.runAsync(() -> push(title, desp));
