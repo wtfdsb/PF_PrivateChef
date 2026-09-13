@@ -1,0 +1,39 @@
+# 自动构建并推送 Docker 镜像到腾讯云容器镜像服务（TCR）
+# 用法：
+#   1. 腾讯云容器镜像服务（https://console.cloud.tencent.com/tcr）创建命名空间和仓库
+#   2. 在 TCR 控制台生成「长期访问凭证」（用户名 + 密码）
+#   3. GitHub 仓库 Settings → Secrets and variables → Actions 添加：
+#      TCR_USERNAME / TCR_PASSWORD / TCR_NAMESPACE / TCR_REPO
+#   4. 每次 push 到 main 会自动构建推送；云托管「从地址拉取镜像」填：
+#      ccr.ccs.tencentyun.com/<命名空间>/<仓库名>:latest
+name: build-and-push-image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'PF_Private_Chef/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 登录腾讯云镜像仓库
+        run: |
+          echo "${{ secrets.TCR_PASSWORD }}" | docker login ccr.ccs.tencentyun.com \
+            -u "${{ secrets.TCR_USERNAME }}" --password-stdin
+
+      - name: 构建镜像
+        working-directory: PF_Private_Chef
+        run: |
+          docker build -t ccr.ccs.tencentyun.com/${{ secrets.TCR_NAMESPACE }}/${{ secrets.TCR_REPO }}:latest \
+            -t ccr.ccs.tencentyun.com/${{ secrets.TCR_NAMESPACE }}/${{ secrets.TCR_REPO }}:${{ github.sha }} .
+
+      - name: 推送镜像
+        run: |
+          docker push ccr.ccs.tencentyun.com/${{ secrets.TCR_NAMESPACE }}/${{ secrets.TCR_REPO }}:latest
+          docker push ccr.ccs.tencentyun.com/${{ secrets.TCR_NAMESPACE }}/${{ secrets.TCR_REPO }}:${{ github.sha }}
