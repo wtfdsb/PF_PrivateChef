@@ -7,6 +7,39 @@
 **为什么选它**：免买服务器、免备案（默认域名可直接配置为小程序 request 合法域名）、
 按量付费（最小实例为 0，没流量几乎不花钱）、自动重启、容器化一键部署。
 
+> ## 你已开通的资源（2026-09 记录）
+> - 环境 ID：`prod-d4g54iuor98846114`（上海区）
+> - 云托管服务：`springboot-8oo4`（当前跑的是官方模板，需换成本项目代码）
+> - 访问域名：`https://springboot-8oo4-313156-9-1487241248.sh.run.tcloudbase.com`
+> - 云数据库 MySQL：账号 `root`（密码见微信服务通知）
+
+### 换成本项目代码（云托管控制台操作）
+1. 云托管 → 服务 `springboot-8oo4` → 「部署」
+2. 代码源选 **GitHub** → 授权 → 仓库 `wtfdsb/PF_PrivateChef` → 构建目录 `PF_Private_Chef`
+3. 环境变量按下表配置（模板自带的删掉）：
+
+| 变量 | 值 |
+|---|---|
+| `DB_HOST` | 云数据库内网地址（数据库管理页查看，形如 10.x.x.x） |
+| `DB_PORT` | 3306 |
+| `DB_NAME` | pf_private_chef |
+| `DB_USER` | root |
+| `DB_PASSWORD` | 云数据库密码 |
+| `WX_APPID` | wx45327e7181e4ce5a |
+| `WX_SECRET` | 小程序的 AppSecret |
+| `WX_MOCK_LOGIN` | false |
+| `PF_TOKEN_SECRET` | 随机长字符串 |
+| `PF_NOTIFY_KEY` | Server酱 SendKey |
+| `PF_PUSHPLUS_TOKEN` | PushPlus token（需先实名：verify.pushplus.plus） |
+| `TZ` | Asia/Shanghai |
+
+4. 端口 `8080`，最小实例数 `0`
+5. 部署后首次构建约 3-5 分钟
+
+### 初始化数据库
+云开发控制台 → 云数据库 MySQL → 「SQL 执行」→ 粘贴
+`PF_Private_Chef/sql/cloud-init.sql`（建库建表灌数据三合一）→ 执行。
+
 ### 你需要准备的
 - 小程序管理员微信（能登录微信公众平台 + 微信云托管）
 - 一个能收验证码的手机号（开通时实名）
