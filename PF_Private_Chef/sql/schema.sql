@@ -115,6 +115,24 @@ CREATE TABLE service_item (
 ) ENGINE=InnoDB COMMENT='服务项目详情';
 
 -- ------------------------------------------------------------
+-- 单点菜单（凉菜/热菜/主食/需预定付押金，管理端可增删改）
+-- ------------------------------------------------------------
+DROP TABLE IF EXISTS menu_item;
+CREATE TABLE menu_item (
+  id          BIGINT        NOT NULL AUTO_INCREMENT,
+  category    VARCHAR(16)   NOT NULL COMMENT 'cold凉菜 hot热菜 staple主食 deposit需预定付押金',
+  name        VARCHAR(64)   NOT NULL COMMENT '菜名',
+  price       DECIMAL(8,2)  NOT NULL DEFAULT 0 COMMENT '价格（元）',
+  unit        VARCHAR(16)   DEFAULT NULL COMMENT '计价单位：只/6只/碗/条/斤/份',
+  sort        INT           NOT NULL DEFAULT 0 COMMENT '排序，越小越前',
+  status      TINYINT       NOT NULL DEFAULT 1 COMMENT '1上架 0下架',
+  deleted     TINYINT       NOT NULL DEFAULT 0,
+  created_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_cat (category)
+) ENGINE=InnoDB COMMENT='单点菜单';
+
+-- ------------------------------------------------------------
 -- 档期
 -- ------------------------------------------------------------
 DROP TABLE IF EXISTS schedule_slot;

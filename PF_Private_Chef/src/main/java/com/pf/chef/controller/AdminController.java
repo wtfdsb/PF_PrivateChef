@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.pf.chef.common.BizException;
 import com.pf.chef.common.R;
 import com.pf.chef.entity.Booking;
+import com.pf.chef.entity.MenuItem;
 import com.pf.chef.entity.Review;
 import com.pf.chef.entity.ScheduleSlot;
 import com.pf.chef.mapper.BookingMapper;
+import com.pf.chef.mapper.MenuItemMapper;
 import com.pf.chef.mapper.ReviewMapper;
 import com.pf.chef.service.AdminAuthService;
 import com.pf.chef.service.BookingService;
@@ -41,6 +43,7 @@ public class AdminController {
     private final NotificationService notificationService;
     private final BookingMapper bookingMapper;
     private final ReviewMapper reviewMapper;
+    private final MenuItemMapper menuItemMapper;
 
     /** 管理员登录 */
     @PostMapping("/login")
@@ -165,6 +168,89 @@ public class AdminController {
         return R.ok();
     }
 
+    // ==================== 单点菜单管理 ====================
+
+    private static final List<String> MENU_CATS = List.of(
+            MenuItem.CAT_COLD, MenuItem.CAT_HOT, MenuItem.CAT_STAPLE, MenuItem.CAT_DEPOSIT);
+
+    /** 菜单列表（含下架，管理端用） */
+    @GetMapping("/menu")
+    public R<List<MenuItem>> menuList() {
+        return R.ok(menuItemMapper.selectList(
+                Wrappers.<MenuItem>lambdaQuery()
+                        .orderByAsc(MenuItem::getCategory)
+                        .orderByAsc(MenuItem::getSort)
+                        .orderByAsc(MenuItem::getId)));
+    }
+
+    /** 新增菜品 */
+    @PostMapping("/menu")
+    public R<MenuItem> menuCreate(@RequestBody MenuReq req) {
+        validateMenuReq(req);
+        MenuItem item = new MenuItem();
+        item.setCategory(req.getCategory());
+        item.setName(req.getName().trim());
+        item.setPrice(req.getPrice());
+        item.setUnit(req.getUnit());
+        item.setSort(req.getSort() == null ? 99 : req.getSort());
+        item.setStatus(req.getStatus() == null ? 1 : req.getStatus());
+        menuItemMapper.insert(item);
+        return R.ok(item);
+    }
+
+    /** 修改菜品 */
+    @PostMapping("/menu/{id}")
+    public R<MenuItem> menuUpdate(@PathVariable Long id, @RequestBody MenuReq req) {
+        MenuItem item = menuItemMapper.selectById(id);
+        if (item == null) {
+            return R.fail(404, "菜品不存在");
+        }
+        validateMenuReq(req);
+        item.setCategory(req.getCategory());
+        item.setName(req.getName().trim());
+        item.setPrice(req.getPrice());
+        item.setUnit(req.getUnit());
+        if (req.getSort() != null) {
+            item.setSort(req.getSort());
+        }
+        menuItemMapper.updateById(item);
+        return R.ok(item);
+    }
+
+    /** 上架/下架 */
+    @PostMapping("/menu/{id}/status")
+    public R<MenuItem> menuStatus(@PathVariable Long id, @RequestBody MenuReq req) {
+        MenuItem item = menuItemMapper.selectById(id);
+        if (item == null) {
+            return R.fail(404, "菜品不存在");
+        }
+        item.setStatus(req.getStatus() != null && req.getStatus() == 0 ? 0 : 1);
+        menuItemMapper.updateById(item);
+        return R.ok(item);
+    }
+
+    /** 删除菜品 */
+    @PostMapping("/menu/{id}/delete")
+    public R<Void> menuDelete(@PathVariable Long id) {
+        menuItemMapper.deleteById(id);
+        return R.ok();
+    }
+
+    private void validateMenuReq(MenuReq req) {
+        if (req == null || req.getCategory() == null || !MENU_CATS.contains(req.getCategory())) {
+            throw new BizException(400, "分类不合法");
+        }
+        if (req.getName() == null || req.getName().isBlank()) {
+            throw new BizException(400, "菜名不能为空");
+        }
+        if (req.getName().trim().length() > 60) {
+            throw new BizException(400, "菜名太长了");
+        }
+        if (req.getPrice() == null || req.getPrice().doubleValue() < 0) {
+            throw new BizException(400, "价格不合法");
+        }
+    }
+
     /** 快捷查档期（后台用） */
     @GetMapping("/slots")
     public R<List<ScheduleSlot>> slots(@RequestParam(required = false)
@@ -198,5 +284,19 @@ public class AdminController {
     public static class KfMsgReq {
         /** 发送给客户的文本内容 */
         private String content;
+    }
+
+    @Data
+    public static class MenuReq {
+        /** cold / hot / staple / deposit */
+        private String category;
+        private String name;
+        /** 价格（元） */
+        private java.math.BigDecimal price;
+        /** 计价单位：只 / 6只 / 碗 / 条 / 斤 / 份 */
+        private String unit;
+        private Integer sort;
+        /** 1 上架 0 下架（仅状态接口用） */
+        private Integer status;
     }
 }

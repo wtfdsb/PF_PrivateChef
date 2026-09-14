@@ -120,6 +120,11 @@ Page({
     wx.navigateTo({ url: '/pages/menu/menu' })
   },
 
+  /** 单点菜单 */
+  goMenuItems() {
+    wx.navigateTo({ url: '/pages/menu-items/menu-items' })
+  },
+
   goAbout() {
     wx.navigateTo({ url: '/pages/about/about' })
   },

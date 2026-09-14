@@ -127,6 +127,12 @@ src/main/java/com/pf/chef/
 | GET | `/api/reviews` | 客户评价（仅已授权） | 公开 |
 | GET | `/api/services` | 服务项目列表（首页网格） | 公开 |
 | GET | `/api/services/{code}` | 服务项目详情（家庭聚餐/生日寿宴…） | 公开 |
+| GET | `/api/menu?category=` | 单点菜单（凉菜/热菜/主食/押金菜） | 公开 |
+| GET | `/api/admin/menu` | 后台：菜单列表（含下架） | 🔒 管理员 |
+| POST | `/api/admin/menu` | 后台：新增菜品 | 🔒 管理员 |
+| POST | `/api/admin/menu/{id}` | 后台：修改菜品 | 🔒 管理员 |
+| POST | `/api/admin/menu/{id}/status` | 后台：上下架 | 🔒 管理员 |
+| POST | `/api/admin/menu/{id}/delete` | 后台：删除菜品 | 🔒 管理员 |
 | POST | `/api/auth/login` | 微信登录 `{code}` → `{token, openid}` | 公开 |
 | POST | `/api/bookings` | 提交预约（含口味忌口/特殊需求） | 公开（待收紧） |
 | GET | `/api/bookings/mine` | 我的预约 | 公开（待收紧） |

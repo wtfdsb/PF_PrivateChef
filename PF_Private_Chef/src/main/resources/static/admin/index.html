@@ -98,6 +98,18 @@
 
   /* 客服消息 */
   .kf { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line2); }
+
+  /* 菜单管理表单 */
+  .m-form { display: flex; flex-direction: column; gap: 10px; }
+  .m-row { display: flex; align-items: center; gap: 8px; }
+  .m-label { color: var(--muted); font-size: 13px; flex-shrink: 0; }
+  .m-form input, .m-form select {
+    flex: 1; height: 38px; padding: 0 10px; border-radius: 8px;
+    background: var(--card2); border: 1px solid var(--line2); color: var(--text); font-size: 13px;
+  }
+  .m-form input:focus, .m-form select:focus { outline: none; border-color: var(--gold); }
+  .mi .main { font-size: 15px; }
+  .mi-off { opacity: .55; }
   .kf-h { font-size: 13px; color: var(--gold2); margin-bottom: 8px; }
   .kf-h span { color: var(--dim); font-weight: 400; font-size: 11px; }
   .kf-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -168,6 +180,7 @@
     <div class="tabs">
       <div class="tab on" data-tab="bookings" onclick="switchTab('bookings')">预约单</div>
       <div class="tab" data-tab="slots" onclick="switchTab('slots')">档期</div>
+      <div class="tab" data-tab="menu" onclick="switchTab('menu')">菜单</div>
       <div class="tab" data-tab="reviews" onclick="switchTab('reviews')">评价</div>
     </div>
 
@@ -193,6 +206,43 @@
     <!-- 评价 -->
     <div id="tabReviews" class="hide">
       <div id="reviewList"></div>
+    </div>
+
+    <!-- 单点菜单管理 -->
+    <div id="tabMenu" class="hide">
+      <div class="card">
+        <div class="m-form">
+          <div class="m-row">
+            <span class="m-label">菜名</span>
+            <input id="mName" placeholder="如：古法豉汁蒸东星斑">
+          </div>
+          <div class="m-row">
+            <span class="m-label">价格</span>
+            <input id="mPrice" type="number" placeholder="如：798">
+            <span class="m-label" style="width:auto;margin-left:14px;">单位</span>
+            <input id="mUnit" placeholder="只/斤/份，可空" style="max-width:110px;">
+          </div>
+          <div class="m-row">
+            <span class="m-label">分类</span>
+            <select id="mCategory">
+              <option value="cold">凉菜</option>
+              <option value="hot">热菜</option>
+              <option value="staple">主食</option>
+              <option value="deposit">需预定·押金</option>
+            </select>
+            <button class="btn gold" style="margin-left:auto;" onclick="saveMenuItem()">保存</button>
+            <button class="btn" id="mCancelBtn" style="display:none;" onclick="resetMenuForm()">取消编辑</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs" id="menuFilter">
+        <div class="tab on" data-c="" onclick="setMenuFilter(this,'')">全部</div>
+        <div class="tab" data-c="cold" onclick="setMenuFilter(this,'cold')">凉菜</div>
+        <div class="tab" data-c="hot" onclick="setMenuFilter(this,'hot')">热菜</div>
+        <div class="tab" data-c="staple" onclick="setMenuFilter(this,'staple')">主食</div>
+        <div class="tab" data-c="deposit" onclick="setMenuFilter(this,'deposit')">押金菜</div>
+      </div>
+      <div id="menuList"></div>
     </div>
   </main>
 </div>
@@ -348,6 +398,7 @@ function switchTab(name) {
   document.getElementById('tabBookings').classList.toggle('hide', name !== 'bookings')
   document.getElementById('tabSlots').classList.toggle('hide', name !== 'slots')
   document.getElementById('tabReviews').classList.toggle('hide', name !== 'reviews')
+  document.getElementById('tabMenu').classList.toggle('hide', name !== 'menu')
   loadAll()
 }
 function setFilter(el, status) {
@@ -363,6 +414,7 @@ async function loadAll() {
   if (currentTab === 'bookings') loadBookings()
   if (currentTab === 'slots') loadSlots()
   if (currentTab === 'reviews') loadReviews()
+  if (currentTab === 'menu') loadMenu()
 }
 
 async function loadStats() {
@@ -530,6 +582,109 @@ async function toggleAuth(id, authorized) {
   try {
     await api('/api/admin/reviews/' + id + '/authorize?authorized=' + authorized, { method: 'POST' })
     loadReviews()
+  } catch (e) { toast(e.message) }
+}
+
+/* ===== 单点菜单管理 ===== */
+var CAT_TEXT = { cold: '凉菜', hot: '热菜', staple: '主食', deposit: '押金菜' }
+var menuFilter = ''
+var editingMenuId = null
+
+function setMenuFilter(el, c) {
+  menuFilter = c
+  document.querySelectorAll('#menuFilter .tab').forEach(function (x) { x.classList.remove('on') })
+  el.classList.add('on')
+  loadMenu()
+}
+
+function resetMenuForm() {
+  editingMenuId = null
+  document.getElementById('mName').value = ''
+  document.getElementById('mPrice').value = ''
+  document.getElementById('mUnit').value = ''
+  document.getElementById('mCategory').value = 'cold'
+  document.getElementById('mCancelBtn').style.display = 'none'
+}
+
+async function loadMenu() {
+  var box = document.getElementById('menuList')
+  box.innerHTML = '<div class="empty">加载中…</div>'
+  try {
+    var list = await api('/api/admin/menu')
+    if (menuFilter) list = list.filter(function (x) { return x.category === menuFilter })
+    if (!list.length) {
+      box.innerHTML = '<div class="empty">这个分类还没有菜<br>用上面的表单添加</div>'
+      return
+    }
+    box.innerHTML = list.map(function (m) {
+      var off = Number(m.status) === 0
+      return '<div class="card mi' + (off ? ' mi-off' : '') + '">' +
+        '<div class="head"><div class="main">' + esc(m.name) +
+          '<small>' + (CAT_TEXT[m.category] || m.category) + ' · ¥' + esc(m.price) + (m.unit ? '/' + esc(m.unit) : '') + '</small></div>' +
+          '<span class="chip st-' + (off ? 'canceled' : 'done') + '">' + (off ? '已下架' : '上架中') + '</span></div>' +
+        '<div class="acts">' +
+          '<button class="btn" onclick="editMenuItem(' + m.id + ')">改</button>' +
+          '<button class="btn" onclick="toggleMenuItem(' + m.id + ',' + (off ? 1 : 0) + ')">' + (off ? '重新上架' : '下架') + '</button>' +
+          '<button class="btn warn" onclick="deleteMenuItem(' + m.id + ')">删</button>' +
+        '</div>' +
+      '</div>'
+    }).join('')
+  } catch (e) {
+    box.innerHTML = '<div class="empty">' + esc(e.message) + '</div>'
+  }
+}
+
+function editMenuItem(id) {
+  var box = document.getElementById('menuList')
+  var btn = box.querySelector('button[onclick="editMenuItem(' + id + ')"]')
+  if (!btn) return
+  // 从已渲染数据里找（简化：再拉一次列表定位）
+  api('/api/admin/menu').then(function (list) {
+    var m = list.find(function (x) { return Number(x.id) === Number(id) })
+    if (!m) { toast('菜品不存在'); return }
+    editingMenuId = id
+    document.getElementById('mName').value = m.name
+    document.getElementById('mPrice').value = m.price
+    document.getElementById('mUnit').value = m.unit || ''
+    document.getElementById('mCategory').value = m.category
+    document.getElementById('mCancelBtn').style.display = ''
+    toast('已填入表单，改完点保存')
+  }).catch(function (e) { toast(e.message) })
+}
+
+async function saveMenuItem() {
+  var name = document.getElementById('mName').value.trim()
+  var price = document.getElementById('mPrice').value.trim()
+  var unit = document.getElementById('mUnit').value.trim()
+  var category = document.getElementById('mCategory').value
+  if (!name) { toast('请输入菜名'); return }
+  if (price === '' || isNaN(Number(price)) || Number(price) < 0) { toast('请输入正确的价格'); return }
+  var body = { category: category, name: name, price: Number(price), unit: unit || null }
+  try {
+    if (editingMenuId) {
+      await api('/api/admin/menu/' + editingMenuId, { method: 'POST', body: body })
+      toast('已修改')
+    } else {
+      await api('/api/admin/menu', { method: 'POST', body: body })
+      toast('已添加')
+    }
+    resetMenuForm()
+    loadMenu()
+  } catch (e) { toast(e.message) }
+}
+
+async function toggleMenuItem(id, status) {
+  try {
+    await api('/api/admin/menu/' + id + '/status', { method: 'POST', body: { status: status } })
+    loadMenu()
+  } catch (e) { toast(e.message) }
+}
+
+async function deleteMenuItem(id) {
+  if (!confirm('确定删除这道菜？删除后小程序里就看不到了')) return
+  try {
+    await api('/api/admin/menu/' + id + '/delete', { method: 'POST', body: {} })
+    loadMenu()
   } catch (e) { toast(e.message) }
 }
 

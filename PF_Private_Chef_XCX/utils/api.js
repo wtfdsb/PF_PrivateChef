@@ -228,6 +228,16 @@ async function getServiceItem(code) {
   return call(`/api/services/${code}`)
 }
 
+/** 单点菜单列表（可指定分类 cold/hot/staple/deposit） */
+async function listMenuItems(category) {
+  if (cfg().useMock) {
+    let list = mock.menuItems.slice()
+    if (category) list = list.filter((m) => m.category === category)
+    return list
+  }
+  return call('/api/menu', { data: category ? { category } : {} })
+}
+
 /**
  * 提交预约（核心写操作）
  * @param {object} payload
@@ -303,6 +313,7 @@ module.exports = {
   listReviews,
   listServices,
   getServiceItem,
+  listMenuItems,
   submitBooking,
   listMyBookings,
 }

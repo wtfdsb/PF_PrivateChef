@@ -247,6 +247,10 @@
 
       <!-- ========== 底部入口 ========== -->
       <view class="section anim-up d8">
+        <view class="card link-card" bindtap="goMenuItems">
+          <text>单点菜单 · 凉热主食 58 道，看中哪道打电话</text>
+          <text class="dim">›</text>
+        </view>
         <view class="card link-card" bindtap="goAbout">
           <text>收费和定金，一条条说清楚</text>
           <text class="dim">›</text>
